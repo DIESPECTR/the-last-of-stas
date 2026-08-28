@@ -1270,3 +1270,15 @@ Purpose: chronological source material for a future development scenario/video s
 6. Browser regression, desktop: **Archetypes 6/6** loaded; **Our zombies 10/10** loaded; selection worked; no image overflow from previews.
 7. Browser regression, reel: both tabs switch correctly; **Archetypes 6/6** loaded after rerender; selection worked.
 8. Captured browser evidence for both desktop lists and the reel list. Result: concept photos are visible in both tabs; no cropped/blank card remains.
+
+
+### 67. Added Dog Handler Zombie and verified the local release candidate — 2026-08-28
+- Audited the available production assets. The Dog Handler has a 1024×1536 concept portrait and a transparent four-direction master (`dog_handler_zombie_4dir_master_alpha.png`); authored `idle/walk/attack` sheet sets do not yet exist.
+- Added `dog_handler_zombie` to `data/zombies/zombies.json` with paired-unit tuning: 66 HP, speed 36, damage 5, 1.75 s attack interval, radius 13, and cloth/tendon/teeth drops.
+- Registered the Dog Handler master, render scale, 96-pixel paired-unit draw size, picker label **«ЗОМБИ С СОБАКОЙ»**, concept portrait, and master fallback in `src/game.js`.
+- Added the type to the Hater Raid originals tab and the normal friend-zombie spawn pool. The runtime falls back to the transparent four-direction master until the authored action sheets are delivered.
+- Ran `node --check src/game.js` and `node --check src/hater-raid.js`: no syntax errors.
+- Ran the isolated static build at `http://localhost:8080`; selected **«ЗОМБИ С СОБАКОЙ»** in Hater Raid and started it successfully. The loaded concept portrait measured 1024×1536, raid HUD appeared, and the canvas showed the handler plus dog as the controlled character.
+- Browser console check contained no `error`, `failed`, `TypeError`, or `ReferenceError` entries.
+- Created and pushed GitHub repository `DIESPECTR/the-last-of-stas`; Dog Handler integration commit is `d858336`.
+- Added a minimal Caddy `Dockerfile` for Railway static hosting. Railway CLI deployment is pending because the supplied API token was rejected with `Unauthorized`; no public URL exists yet.
