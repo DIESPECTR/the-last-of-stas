@@ -1369,3 +1369,21 @@ Purpose: chronological source material for a future development scenario/video s
 4. Production smoke-test passed at 1920×1200: desktop boot was not blocked by the mobile gate, Hater Raid launched with KUOK selected, raid controls rendered, and KUOK idle/walk/attack sheets loaded as 512×512.
 5. Production console contained no `error`, `failed`, `404`, `TypeError`, `ReferenceError` or `warning` entries.
 6. Published links: game `https://the-last-of-stas-web-production.up.railway.app/`; source `https://github.com/DIESPECTR/the-last-of-stas`.
+
+## 2026-08-28 — Runtime debugging session: core mode and Hater Raid
+
+1. Re-read the current runtime, existing `?dev=1` bridge, previous regression evidence, and opened the deployed Railway build in a single browser tab.
+2. Reproduced the core mode before wave start and inspected live variables. Physical-code probes passed for all movement keys: `W −45.82y`, `A −50.74x`, `S +9.82y` before reaching the shelter collision boundary, and `D +50.75x`; every key selected the `walk` action.
+3. Ran controlled first-night simulations with seed 17. The undefended case reached the expected `lost` state at 160.7 seconds; the defended reference reached `won` with 60 kills and 1232/1260 shelter HP.
+4. Tested core held-fire through the real Canvas input path. One short burst produced five projectiles, increased heat, set cooldown, and did not produce invalid state. A high-heat probe correctly entered the weapon failure path; the observed `jam` was valid for the current 120-point heat limit rather than an overflow.
+5. Selected Injured KUOK in Hater Raid and inspected runtime state while moving. Position changed, animation time advanced, the selected type remained `injured_kuok`, and the runtime loaded its idle/walk sheets without disappearance.
+6. Audited all 204 selectable Hater Raid animation sheets in-browser: 204/204 decoded at 512×512. Alpha audit also passed 204/204 with transparent pixels and visible pixels in every one of the sixteen 128×128 cells.
+7. Hit all eight fence sections through the actual Space-key attack path. Every section took positive damage. Destroying a section set `breached=true`, advanced the raid to the entry stage, and allowed the player to cross the formerly collidable fence span.
+8. Continued through the house entrance while inspecting `player.x/y`, `entry.outsideY`, `entry.insideY`, and `stageIndex`; the runtime transitioned from stage 2 to stage 3 at the intended interior threshold.
+9. Found a confirmed gameplay defect during the victory probe: AI companions could reduce speaker HP to zero while the controlled zombie was still crossing the house, causing a passive victory without interacting with the final objective.
+10. Fixed companion speaker damage in `src/hater-raid.js` by flooring AI damage at 1 speaker HP. The controlled zombie remains the only actor that can land the final blow.
+11. Re-ran the fix against the local runtime on port 8000. With the player 565.8 pixels away, six companions reduced the speaker to exactly 1 HP while phase remained `active`; moving the player into range and pressing Space reduced it to 0 and changed phase to `won`.
+12. Re-ran the defeat transition with player HP forced to zero. The next runtime update changed Hater Raid phase from `active` to `lost`.
+13. Browser/source cleanup found no `TEMP DEBUG:` markers in `src/`. All probes lived only in browser memory and were cleared by reload.
+14. The HTTP audit found one missing `/favicon.ico` request. Added an explicit PNG favicon declaration in `index.html`; the final reload fetched it with HTTP 200. Runtime modules, JSON, start images, SFX, locale, scenario, and music requests also returned HTTP 200.
+15. Final console note: the browser log retains one earlier `SyntaxError` at the production page timestamp 21:48:50. It was created by a rejected malformed `ToolBrowserRunJavaScript` diagnostic snippet, not by a project script. Fresh local boot initialized `window.__dev`, the 1920×1200 Canvas, and all startup assets without a new game-source exception.

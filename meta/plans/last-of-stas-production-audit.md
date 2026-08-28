@@ -18,6 +18,13 @@ TYPE: plan
 - [x] Improve accessibility, reduced-motion behavior and touch/readability safety
 - [x] Remove stale debug/dead production paths and obvious data defects
 
+## Final review and redeploy
+- [x] Re-run runtime debug regression for core mode and Hater Raid
+- [x] Fix passive Hater Raid victory and missing favicon request
+- [x] Validate the final local build in desktop and reel layouts
+- [ ] Commit and push the release to GitHub
+- [ ] Verify the Railway production deployment and record the public URL
+
 ## Post-fullscreen display-mode regression
 - [x] Recheck normal desktop shell and quiet-yard gameplay
 - [x] Recheck normal cinema mode, HUD anchoring and exit

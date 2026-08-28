@@ -235,7 +235,10 @@ export function updateHaterRaid(raid,dt,input,world,collideShelter,advanceAnimat
       if(companion.attackTimer<=0){
         companion.attackTimer=companion.attack_interval||1.7;
         const damage=Math.max(2,Math.round((companion.damage||4)*COMPANION_DAMAGE_SCALE));
-        raid.speaker.hp=Math.max(0,raid.speaker.hp-damage);raid.speaker.hitFlash=.16;
+        // The crowd helps, but the controlled zombie must land the final blow. Without this floor the
+        // companions could destroy the speaker while the player was still walking through the house,
+        // producing a passive victory with no interaction at the actual raid objective.
+        raid.speaker.hp=Math.max(1,raid.speaker.hp-damage);raid.speaker.hitFlash=.16;
         raid.effects.push({type:'speakerHit',x:raid.speaker.x,y:raid.speaker.y,life:.22,maxLife:.22});
         raid.audioEvents?.push('speaker_hit');
       }
