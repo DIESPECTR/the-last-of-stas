@@ -1282,3 +1282,11 @@ Purpose: chronological source material for a future development scenario/video s
 - Browser console check contained no `error`, `failed`, `TypeError`, or `ReferenceError` entries.
 - Created and pushed GitHub repository `DIESPECTR/the-last-of-stas`; Dog Handler integration commit is `d858336`.
 - Added a minimal Caddy `Dockerfile` for Railway static hosting. Railway CLI deployment is pending because the supplied API token was rejected with `Unauthorized`; no public URL exists yet.
+
+### 68. Prepared Dog Handler motion pipeline; generation and deployment blocked upstream — 2026-08-28
+- Re-read the Kling image-to-video and direct video-to-transparent-sprite-sheet templates. The required path is locked as: four directional masters → Kling MP4 → BRIA background removal → 128×128 transparent sprite tiles in a 4×4 sheet.
+- Cropped the approved transparent 1024×1024 four-direction master into directional 512×512 inputs: `down`, `right`, `left`, and `up`. The existing `down` master was retained.
+- Created the full Dog Handler Kling metadata matrix for idle/walk/attack in all four directions, preserving the handler and single black-and-white dog as one shared gameplay unit, fixed camera direction, plain removable background, and shared ground anchor.
+- Tried to submit the 12 independent clips in parallel. Kling returned a mix of `Internal error`, `No cluster nodes available`, and insufficient balance errors (one 5-second pro clip requires 96 credits; balance fell below the requirement). No MP4 output was claimed or integrated.
+- Re-ran `railway whoami` using the supplied token. Railway returned `Unauthorized` again, so no project, deployment, or public URL can be created from this token.
+- Runtime remains intentionally safe: the Dog Handler uses the verified transparent four-direction static master until actual alpha sheets are generated and validated.
