@@ -1387,3 +1387,13 @@ Purpose: chronological source material for a future development scenario/video s
 13. Browser/source cleanup found no `TEMP DEBUG:` markers in `src/`. All probes lived only in browser memory and were cleared by reload.
 14. The HTTP audit found one missing `/favicon.ico` request. Added an explicit PNG favicon declaration in `index.html`; the final reload fetched it with HTTP 200. Runtime modules, JSON, start images, SFX, locale, scenario, and music requests also returned HTTP 200.
 15. Final console note: the browser log retains one earlier `SyntaxError` at the production page timestamp 21:48:50. It was created by a rejected malformed `ToolBrowserRunJavaScript` diagnostic snippet, not by a project script. Fresh local boot initialized `window.__dev`, the 1920×1200 Canvas, and all startup assets without a new game-source exception.
+
+## 2026-08-28 — Final production deployment verification
+
+1. Ran syntax validation for `src/game.js` and `src/hater-raid.js`; both passed.
+2. Ran `git diff --check`; no whitespace or patch errors were found.
+3. Committed release changes as `c56938e` and pushed `main` to GitHub.
+4. Verified Railway deployed the new HUD copy, Hater Raid speaker HP-floor fix, and favicon at `https://the-last-of-stas-web-production.up.railway.app/`.
+5. Confirmed the production browser console had no errors, warnings, failed loads, or 404s.
+6. Found one harmless empty `src` attribute on the hidden ending image during the final asset audit; removed it to prevent a redundant document request.
+7. Rechecked the fix locally: the image now has no `src`, the browser console is clean, and horizontal overflow remains zero.
