@@ -1310,3 +1310,9 @@ Purpose: chronological source material for a future development scenario/video s
 - Published all twelve runtime sheets under `assets/animations/sheets/dog_handler_zombie/`, matching the generic runtime resolver used by `drawAnimatedSprite`.
 - Strict validation passed: 12/12 files, each `512×512` RGBA, alpha range `0–255`, and all 16 cells contain visible sprite data. Updated the animation cache revision so existing browser sessions request the new sheets.
 - Railway deployment remains blocked: both supplied API tokens returned `Unauthorized` to `railway whoami`; no Railway project or public URL was created.
+
+### 72. Prepared Railway static-server deployment — 2026-08-28
+- Audited the container setup: project uses `caddy:2-alpine` and requires Railway's dynamic `PORT`, not a fixed port 80.
+- Added `Caddyfile`: static root `/usr/share/caddy`, compression, SPA fallback to `index.html`, and `:{$PORT:8080}` listener.
+- Updated `Dockerfile` to install that config and expose the matching 8080 fallback.
+- Deployment itself remains blocked until a valid Railway workspace API token is supplied; Railway CLI returned `Unauthorized` for the previous credentials.

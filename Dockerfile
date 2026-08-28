@@ -1,3 +1,4 @@
 FROM caddy:2-alpine
 COPY . /usr/share/caddy
-EXPOSE 80
+COPY Caddyfile /etc/caddy/Caddyfile
+EXPOSE 8080
