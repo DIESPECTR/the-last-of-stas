@@ -1,0 +1,8 @@
+.quadcodeai/
+.temp/
+.DS_Store
+
+# Source animation renders are not required by the browser runtime.
+assets/**/*.mp4
+assets/**/*.mov
+assets/**/*.webm

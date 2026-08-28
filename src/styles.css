@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --bg:#0b0d0c;--surface:#151815;--surface-2:#1d211d;--line:#3b4039;
+  --text:#e7e4da;--muted:#999d91;--faint:#666b63;--moss:#8d9a68;
+  --moss-bright:#a9b67e;--rust:#a94734;--danger:#c2503b;--black:#070807;
+}
+*{box-sizing:border-box}
+html{background:var(--bg);color-scheme:dark}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -20%,#252a22 0,#111410 40%,#090b09 100%);color:var(--text);font:14px 'IBM Plex Mono',monospace}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='190'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");mix-blend-mode:soft-light}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 160px #0008}
+main{position:relative;z-index:1;max-width:1660px;margin:auto;padding:24px 28px 18px}
+header{display:grid;grid-template-columns:minmax(360px,1fr) auto;align-items:end;gap:24px;padding:8px 0 18px;margin-bottom:16px;border-bottom:1px solid var(--line)}
+.title-block{position:relative;padding-left:16px;border-left:3px solid var(--moss)}
+.chapter,.page-mark{display:block;color:var(--moss);font:600 10px/1.3 'IBM Plex Mono',monospace;letter-spacing:.22em;text-transform:uppercase}
+h1,h2{margin:0;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase}
+h1{font-size:52px;line-height:.9;letter-spacing:.035em;font-weight:800;color:#f1eee5;text-shadow:0 4px 20px #000}
+h2{font-size:24px;line-height:1;letter-spacing:.055em;font-weight:700;color:var(--text);padding-bottom:13px;margin:9px 0 14px;border-bottom:1px solid var(--line)}
+p{margin:0 0 12px;color:var(--muted)}
+header p{margin:8px 0 0;color:#aeb1a6;font-size:12px;letter-spacing:.04em}
+.header-actions{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;justify-content:flex-end}
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}
+.game-column{min-width:0}
+.game-wrap{position:relative;overflow:hidden;background:#080908;border:1px solid #454b43;box-shadow:0 20px 60px #000b}
+.game-wrap:before{content:"LIVE / NIGHT 01";position:absolute;z-index:2;right:12px;bottom:10px;color:#d9ddcf80;font:600 9px 'IBM Plex Mono';letter-spacing:.18em;pointer-events:none}
+.game-wrap:after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 70px 10px #0005;border:1px solid #ffffff0a}
+canvas{display:block;width:100%;height:auto;cursor:crosshair}
+#status{position:absolute;z-index:3;left:16px;top:16px;max-width:min(76%,720px);padding:10px 14px 10px 17px;background:#10130fe8;color:#e4e7dd;border:1px solid #596052;border-left:3px solid var(--moss);box-shadow:0 8px 25px #0009;font:600 12px/1.35 'IBM Plex Mono';letter-spacing:.055em;text-transform:uppercase;backdrop-filter:blur(8px)}
+body.raid-mode #status{display:none}
+.sketch-note{display:none}
+.field-strip{display:flex;flex-wrap:wrap;gap:5px 20px;padding:10px 2px 0;color:#7d8279;font-size:10px;line-height:1.65;letter-spacing:.02em}
+.field-strip span::first-letter{color:var(--moss-bright)}
+aside{display:grid;gap:12px;align-content:start;position:sticky;top:12px;max-height:calc(100vh - 24px);overflow-y:auto;overscroll-behavior:contain;padding-right:5px;scrollbar-width:thin;scrollbar-color:#596056 #101310}
+.panel{position:relative;isolation:isolate;padding:20px;background:linear-gradient(145deg,#1b1f1bfa,#111411fa);color:var(--text);border:1px solid #393f38;box-shadow:0 15px 35px #0008;overflow:hidden}
+.panel:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.12;background-image:url('../assets/ui/scrap_panel.png');background-size:cover;mix-blend-mode:luminosity;filter:contrast(1.25)}
+.panel:after{content:"";position:absolute;top:0;left:0;width:38%;height:2px;background:var(--moss)}
+label{display:grid;gap:7px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+select,button{font:600 12px 'IBM Plex Mono',monospace;min-height:44px;width:100%;border-radius:0}
+select{appearance:none;color:var(--text);background:#0e110e url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%23a9b67e'/%3E%3C/svg%3E") no-repeat calc(100% - 14px) 50%;border:1px solid #51584e;padding:10px 38px 10px 12px;outline:none}
+select:focus{border-color:var(--moss-bright);box-shadow:0 0 0 2px #8d9a6833}
+button{position:relative;padding:10px 14px;margin-top:9px;color:#e8e8df;background:#252a25;border:1px solid #596056;cursor:pointer;text-transform:uppercase;letter-spacing:.055em;transition:background .16s,border-color .16s,color .16s,transform .16s}
+button:hover{background:#343a33;border-color:var(--moss-bright);color:#fff;transform:translateY(-1px)}
+button:active{transform:translateY(1px)}
+button:focus-visible{outline:2px solid var(--moss-bright);outline-offset:2px}
+#start{width:auto;min-width:245px;margin:0;background:var(--moss);border-color:var(--moss-bright);color:#10120f;font-weight:700}
+#start:before{content:"▶";margin-right:9px}
+#start:hover{background:var(--moss-bright);color:#080a08}
+#cinema,#reel{width:auto;margin:0;background:#151815;color:#c5c8bd;border-color:#3e443d}
+#cinema:hover,#reel:hover{background:#242923;border-color:#727a6e}
+.cinema-exit{display:none;position:fixed;z-index:40;right:16px;top:16px;width:auto;min-width:88px;margin:0;background:#0e110ed9;backdrop-filter:blur(8px)}
+.stat,.loot{display:flex;justify-content:space-between;gap:18px;padding:7px 0;border-bottom:1px solid #343933;color:#b4b8ae}
+.stat b,.loot b{color:#e4e6de;text-align:right}.tags{margin-top:9px;color:var(--moss-bright);font-size:11px;font-weight:600}
+pre{white-space:pre-wrap;min-height:72px;color:#aeb2a8;font-size:11px;line-height:1.55}
+.weapon-preview{display:block;width:100%;height:auto;margin:8px 0 12px;background:#090b09;border:1px solid #41473f;filter:none}
+.equipped-slot{display:grid;grid-template-columns:74px 1fr;gap:12px;align-items:center;margin:8px 0 12px;padding:9px;background:#0e110e;border:1px solid #3c423b}
+.equipped-slot canvas{width:74px;height:48px;filter:none}.equipped-slot small{display:block;color:#7f847a;margin-top:3px}
+.asset-warning{color:#d26952;font-size:10px;font-weight:600;letter-spacing:.08em}
+.prep-actions{margin-top:17px;padding-top:13px;border-top:1px solid var(--line)}
+.prep-actions .page-mark{margin-bottom:7px}.prep-actions button{margin-top:8px;padding:8px}.prep-actions small{display:block;margin:5px 2px 10px;color:#747970;font-size:10px;line-height:1.4}
+.prep-actions button:disabled{cursor:not-allowed;background:#171a17;color:#5e635c;border-color:#2d312d;transform:none}
+#craft{background:#763225;border-color:#a84936}#craft:hover{background:#963d2d;border-color:#c85b46}
+footer{text-align:left;color:#62675f;padding:14px 2px 0;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+
+body.cinema,body.reel{background:#000;background-image:none;overflow:hidden;touch-action:none;overscroll-behavior:none}
+body.cinema:before,body.cinema:after,body.reel:before,body.reel:after{display:none}
+body.cinema main,body.reel main{max-width:none;margin:0;padding:0;height:100dvh}
+body.cinema header,body.cinema footer,body.cinema aside,body.cinema .field-strip,body.reel header,body.reel footer,body.reel aside,body.reel .field-strip{display:none!important}
+body.cinema .layout,body.reel .layout{display:block;height:100%;gap:0}
+body.cinema .game-column,body.reel .game-column{height:100%}
+body.cinema .game-wrap,body.reel .game-wrap{height:100dvh;border:0;box-shadow:none;background:#000;display:flex;align-items:center;justify-content:center}
+body.cinema .game-wrap:after,body.reel .game-wrap:after{display:none}
+body.cinema canvas{width:min(100vw,calc(100dvh * 1.6));height:min(100dvh,calc(100vw * .625))}
+body.reel canvas{width:auto;height:100dvh;max-width:100vw;aspect-ratio:9/16;object-fit:cover}
+body.cinema .cinema-exit,body.reel .cinema-exit{display:block}
+/* Fullscreen HUD safe zones: the canvas owns the upper-right corner (wave/night plate).
+   DOM status stays in the upper-left lane in cinema and below the canvas instruments in reel;
+   the exit action lives in the quiet lower-right corner in both modes. */
+body.cinema #status{left:max(16px,calc((100vw - min(100vw,100dvh * 1.6))/2 + 16px));right:auto;max-width:min(48vw,520px)}
+body.cinema .cinema-exit{top:auto;bottom:16px;right:max(16px,calc((100vw - min(100vw,100dvh * 1.6))/2 + 16px))}
+body.reel #status{left:50%;right:auto;top:88px;transform:translateX(-50%);width:min(calc(100vw - 24px),calc(100dvh * 9 / 16 - 24px));max-width:min(calc(100vw - 24px),calc(100dvh * 9 / 16 - 24px));font-size:10px;padding:7px 10px;min-height:38px;display:flex;align-items:center}
+body.reel .cinema-exit{top:auto;bottom:12px;right:12px;min-width:88px;height:40px;min-height:40px;padding:6px 10px;border-color:#596052;background:#10130ff2}
+html.reel,html.reel body{height:100%;position:fixed;inset:0;width:100%}
+
+@media(max-width:1180px){.layout{grid-template-columns:minmax(620px,1fr) 330px}main{padding:18px}.header-actions{max-width:500px}h1{font-size:46px}}
+@media(max-width:980px){header{grid-template-columns:1fr}.header-actions{justify-content:flex-start;max-width:none}.layout{grid-template-columns:1fr}aside{position:static;max-height:none;overflow:visible;padding-right:0;grid-template-columns:repeat(3,minmax(0,1fr))}.panel{padding:16px}h2{font-size:21px}}
+@media(max-width:760px){
+  main{padding:8px}
+  header{grid-template-columns:minmax(220px,.75fr) minmax(390px,1.25fr);align-items:center;gap:10px;padding:2px 0 9px;margin-bottom:9px}
+  .title-block{padding-left:11px}.chapter{font-size:8px}h1{font-size:34px}header p{margin-top:5px;font-size:10px}
+  .header-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.header-actions button{min-height:38px;padding:7px 8px;font-size:10px}
+  #start{grid-column:1/-1;min-width:0}.layout{display:block}aside{display:block}.panel{margin-top:10px}.game-wrap:before{display:none}.field-strip{gap:3px 12px}#status{left:9px;top:9px;max-width:calc(100% - 18px);font-size:10px}.cinema-exit{min-height:40px}
+}
+@media(max-width:560px){
+  header{grid-template-columns:1fr;gap:8px}.title-block{display:grid;grid-template-columns:auto 1fr;align-items:end;column-gap:10px}.title-block .chapter{grid-column:1/-1}.title-block p{margin:0 0 2px}.header-actions{grid-template-columns:1fr 1fr}.header-actions #cinema{grid-column:1/-1}.header-actions button{min-height:40px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* Hater Raid — separate reverse-role mode. It reuses the field-journal palette, but the acid red
+   accent makes the mode switch unmistakable without pretending this is another settings panel. */
+.raid-entry{width:auto!important;margin:0!important;background:#682b25!important;border-color:#b44b3d!important;color:#fff!important}
+.raid-picker[hidden],.raid-controls[hidden]{display:none!important}
+.raid-picker{position:fixed;z-index:100;inset:0;display:grid;place-items:center;padding:24px;background:#050605df;backdrop-filter:blur(12px)}
+.raid-picker-card{width:min(1120px,100%);max-height:calc(100dvh - 48px);padding:28px;overflow:hidden;display:flex;flex-direction:column;background:linear-gradient(145deg,#1b1e1a,#0d0f0d);border:1px solid #6f6a5e;box-shadow:0 30px 100px #000;border-left:4px solid #b44b3d}
+.raid-picker-card>p{max-width:880px;line-height:1.6}.raid-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0 0;padding-bottom:8px;border-bottom:1px solid #3e443d}.raid-tabs button{min-height:38px;margin:0;padding:7px 10px;color:#aeb4a8;background:#101310;border-color:#3e443d}.raid-tabs button[aria-selected="true"]{color:#fff;background:#4a2621;border-color:#cf5a46;box-shadow:inset 0 -2px #d35c49}.raid-roster{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));grid-auto-rows:224px;gap:10px;max-height:462px;margin:12px 0 16px;padding:2px 4px 2px 0;overflow-y:auto;overscroll-behavior:contain;scroll-snap-type:y proximity;scrollbar-width:thin;scrollbar-color:#69564e #101310}
+/* Picker cards are portraits first: each character gets a full, uncropped concept image instead of a tiny sprite-like thumbnail. */
+.raid-zombie{min-height:0;margin:0;text-align:left;padding:6px;display:grid;grid-template-rows:142px minmax(0,1fr);align-items:stretch;gap:8px;background:#141714;border-color:#454a42;scroll-snap-align:start}
+.raid-zombie-preview{width:100%;height:142px;display:grid;place-items:center;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 22%,#343a35 0,#151815 62%);border:1px solid #3f463d;box-shadow:inset 0 0 0 1px #0008,0 3px 12px #0008;cursor:pointer}
+.raid-zombie-preview img{width:100%;height:100%;object-fit:contain;object-position:center center;display:block;pointer-events:none}
+.raid-zombie-copy,.raid-zombie-copy b,.raid-zombie-copy span{display:block;min-width:0}.raid-zombie-copy b{font:700 18px/1 'Barlow Condensed';letter-spacing:.055em}.raid-zombie-copy>span{margin-top:6px;color:#90958a;font-size:8px;line-height:1.35}
+.raid-zombie.selected{background:#38201d;border-color:#d35c49;box-shadow:inset 3px 0 #d35c49;color:#fff}.raid-zombie.selected .raid-zombie-preview{border-color:#d35c49;background:radial-gradient(circle,#55332d 0,#1b1210 72%)}
+.raid-picker-actions{display:grid;grid-template-columns:1fr 2fr;gap:10px}.raid-picker-actions button{margin:0}#raid-start{background:#873529;border-color:#cf5a46}
+.raid-controls{position:absolute;z-index:8;left:auto;right:14px;bottom:14px;width:min(370px,calc(100% - 28px));padding:10px 12px;background:#0b0d0bf0;border:1px solid #5a5f55;border-left:3px solid #b44b3d;backdrop-filter:blur(8px)}
+.raid-controls-head{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#d7d4c9;font:700 11px 'IBM Plex Mono'}
+.raid-controls-head button{width:auto;min-height:28px;margin:0;padding:4px 9px;font-size:9px}.raid-taunts{display:grid;grid-template-columns:1fr;gap:6px;margin:8px 0}
+.raid-taunts button{min-height:38px;margin:0;padding:7px 9px;text-transform:none;text-align:left;font-size:9px;line-height:1.25;background:#20231f}
+.raid-taunts button:hover{background:#4a2621;border-color:#be5443}.raid-controls small{display:block;color:#797e74;font-size:9px;line-height:1.35}
+body.reel .raid-picker{left:50%;right:auto;width:min(100vw,calc(100dvh * 9 / 16));transform:translateX(-50%);padding:8px}
+body.reel .raid-picker-card{width:100%;max-height:calc(100dvh - 16px);padding:16px;overflow:hidden}
+body.reel .raid-picker-card h2{font-size:clamp(24px,6.2vw,30px);line-height:1}
+body.reel .raid-picker-card>p{font-size:10px;line-height:1.45}
+body.reel .raid-roster{grid-template-columns:1fr;grid-auto-rows:82px;gap:7px;max-height:171px;margin:12px 0}
+body.reel .raid-zombie{min-height:0;grid-template-columns:64px minmax(0,1fr);gap:9px;padding:5px 7px}
+body.reel .raid-zombie-preview{width:60px;height:70px}
+body.reel .raid-zombie-copy b{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.reel .raid-zombie-copy>span{font-size:7px}
+body.reel .raid-picker-actions{grid-template-columns:1fr 1.5fr;gap:7px}
+body.reel .raid-picker-actions button{min-height:44px;padding:8px;font-size:10px}
+body.reel .raid-controls{left:50%;right:auto;bottom:8px;transform:translateX(-50%);width:min(calc(100vw - 16px),calc(100dvh * 9 / 16 - 16px));padding:8px 9px}
+body.reel .raid-taunts{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:6px 0}
+body.reel .raid-taunts button{min-height:52px;padding:5px 6px;font-size:8px}
+body.reel .raid-controls small{font-size:8px}
+body.reel .cinema-exit{right:max(12px,calc((100vw - min(100vw,100dvh * 9 / 16))/2 + 12px))}
+body.reel.raid-mode .cinema-exit{top:180px}
+body.raid-mode{overflow:hidden}
+body.raid-mode header,body.raid-mode footer,body.raid-mode aside,body.raid-mode .field-strip{display:none!important}
+body.raid-mode main{max-width:none;margin:0;padding:0;height:100dvh}
+body.raid-mode .layout{display:block;height:100%;grid-template-columns:1fr}
+body.raid-mode .game-column,body.raid-mode .game-wrap{height:100%}
+body.raid-mode .game-wrap{border:0;display:flex;align-items:center;justify-content:center;background:#000}
+body.raid-mode canvas{width:min(100vw,calc(100dvh * 1.6));height:min(100dvh,calc(100vw * .625))}
+body.raid-mode:not(.reel) .raid-controls{right:max(14px,calc((100vw - min(100vw,100dvh * 1.6))/2 + 14px))}
+body.reel.raid-mode canvas{width:auto;height:100dvh;max-width:100vw;aspect-ratio:9/16;object-fit:cover}
+body.raid-mode #start{display:none}
+/* Keep the portrait-first hierarchy at compact widths as well; the earlier generic grid rule must not
+   collapse a full-body image into a thumbnail. */
+@media(max-width:760px){
+  .raid-roster{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:198px;max-height:414px}
+  .raid-zombie{grid-template-rows:122px minmax(0,1fr)}
+  .raid-zombie-preview{height:122px}
+}
+body.reel .raid-roster{grid-template-columns:1fr;grid-auto-rows:118px;max-height:248px}
+body.reel .raid-zombie{grid-template-columns:100px minmax(0,1fr);grid-template-rows:1fr;gap:9px;padding:5px 7px}
+body.reel .raid-zombie-preview{width:100px;height:106px}
+body.reel .raid-zombie-copy b{font-size:16px}
+body.reel .raid-zombie-copy>span{font-size:7px}
+@media(max-width:760px){.raid-roster{grid-template-columns:1fr 1fr}.raid-picker-card{padding:18px}.raid-taunts{grid-template-columns:1fr}.raid-taunts button{min-height:36px}.raid-controls{left:8px;right:8px;bottom:8px}}
+
+/* Six cinematic game scenes: two mode cards and four terminal outcomes. Artwork stays untouched;
+   all copy and actions are real DOM so the final wording remains editable without regenerating art. */
+.game-scene{position:fixed;z-index:120;inset:0;display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));background:#050605f2;backdrop-filter:blur(14px);transition:background .24s ease}
+.game-scene[data-selection="stas"],.game-scene:has(.scene-card-stas:is(:hover,:focus-visible,:active)){background:radial-gradient(circle at 30% 48%,#123b5fcc 0,#07131ee8 38%,#030506f7 78%)}
+.game-scene[data-selection="zombie"],.game-scene:has(.scene-card-zombie:is(:hover,:focus-visible,:active)){background:radial-gradient(circle at 70% 48%,#651d1acc 0,#200908e8 38%,#050303f7 78%)}
+.game-scene[hidden]{display:none!important}
+.game-scene-shell{width:min(920px,100%);max-height:100%;display:flex;flex-direction:column;align-items:center;text-align:center}
+.scene-kicker{color:var(--moss-bright);font:600 10px/1.3 'IBM Plex Mono';letter-spacing:.22em;text-transform:uppercase}
+.game-scene h2{margin:8px 0 6px;padding:0;border:0;font-size:clamp(30px,5vw,54px);color:#f2efe6}
+.game-scene-shell>p{max-width:660px;margin:0 0 16px;color:#b2b6aa}
+.scene-cards{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:14px;min-height:0}
+.scene-cards[hidden]{display:none!important}
+.scene-card{min-height:0;margin:0;padding:0;overflow:hidden;display:grid;grid-template-rows:minmax(0,1fr) auto;background:#11130f;border:1px solid #555b50;text-align:left}
+.scene-card:hover,.scene-card:focus-visible{transform:translateY(-3px)}
+.scene-card-stas:hover,.scene-card-stas:focus-visible,.game-scene[data-selection="stas"] .scene-card-stas{border-color:#69b9f2;box-shadow:0 0 0 1px #69b9f255,0 18px 55px #167acb3d}
+.scene-card-zombie:hover,.scene-card-zombie:focus-visible,.game-scene[data-selection="zombie"] .scene-card-zombie{border-color:#e05e51;box-shadow:0 0 0 1px #e05e5155,0 18px 55px #c32d243d}
+.scene-card img{display:block;width:100%;height:min(62vh,610px);object-fit:cover;object-position:center 42%;filter:saturate(.9) contrast(1.04);transition:filter .2s,transform .35s}
+.scene-card:hover img{filter:saturate(1.06) contrast(1.07);transform:scale(1.012)}
+.scene-card>span{display:block;padding:13px 16px 15px;border-top:1px solid #4a5047;background:#11140ff2}
+.scene-card b,.scene-card small{display:block}.scene-card b{font:800 clamp(20px,3vw,30px)/1 'Barlow Condensed';letter-spacing:.06em}.scene-card small{margin-top:5px;color:#92978b;font-size:10px;text-transform:none;letter-spacing:.02em}
+.scene-result{position:relative;width:min(520px,100%);min-height:0;overflow:hidden;border:1px solid #5b6156;box-shadow:0 24px 80px #000}
+.scene-result[hidden]{display:none!important}.scene-result img{display:block;width:100%;max-height:min(70vh,760px);aspect-ratio:2/3;object-fit:cover;object-position:center}
+.scene-result:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,#070907ed 100%);pointer-events:none}
+.scene-result-copy{position:absolute;z-index:1;left:22px;right:22px;bottom:20px;text-align:left;text-shadow:0 2px 12px #000}
+.scene-stamp{display:inline-block;padding:4px 8px;background:var(--moss);color:#0d100c;font-size:9px;font-weight:700;letter-spacing:.15em}.scene-result.is-defeat .scene-stamp{background:#a94734;color:#fff}
+.scene-result h3{margin:8px 0 4px;color:#fff;font:800 clamp(30px,5vw,50px)/.95 'Barlow Condensed';letter-spacing:.035em;text-transform:uppercase}.scene-result p{margin:0;color:#d2d4ca;font-size:11px}
+.scene-actions{width:min(520px,100%);display:grid;grid-template-columns:1fr 1.35fr;gap:10px;margin-top:10px}.scene-actions[hidden]{display:none!important}.scene-actions button{margin:0}.scene-actions .scene-primary{background:var(--moss);border-color:var(--moss-bright);color:#10120f}.scene-result.is-defeat+.scene-actions .scene-primary{background:#873529;border-color:#cf5a46;color:#fff}
+@media(max-width:620px){.game-scene{padding:10px}.game-scene-shell{height:100%}.scene-kicker{font-size:8px}.game-scene h2{font-size:28px;margin-top:5px}.game-scene-shell>p{font-size:10px;margin-bottom:9px}.scene-cards{flex:1;grid-template-columns:1fr 1fr;gap:7px}.scene-card img{height:100%;min-height:0}.scene-card>span{padding:9px}.scene-card b{font-size:18px}.scene-card small{font-size:8px}.scene-result{flex:1}.scene-result img{height:100%;max-height:none}.scene-actions button{min-height:42px;font-size:9px}}
+@media(orientation:landscape) and (max-height:620px){.game-scene-shell{height:100%;display:grid;grid-template-columns:minmax(180px,.55fr) minmax(0,2fr);grid-template-rows:auto auto 1fr;column-gap:18px;text-align:left}.scene-kicker,.game-scene h2,.game-scene-shell>p{grid-column:1}.scene-kicker{align-self:end}.game-scene h2{font-size:30px}.scene-cards{grid-column:2;grid-row:1/4;height:100%}.scene-card img{height:calc(100vh - 86px)}.scene-result{grid-column:2;grid-row:1/4;height:100%;justify-self:center}.scene-result img{height:100%;max-height:none}.scene-actions{grid-column:1;align-self:end;grid-template-columns:1fr}.scene-result:not([hidden])~.scene-actions{display:grid}.scene-result:not([hidden])~.scene-actions button{min-height:38px;margin:0}}

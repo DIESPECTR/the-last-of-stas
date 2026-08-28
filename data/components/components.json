@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "components": [
+    {"id":"metal_pipe","display_name":"Metal Pipe","slot":"frame","tags":["projectile","light"],"modifiers":{"damage":3,"range":2,"noise":4,"heat_limit":55},"cost":{"metal_scrap":2}},
+    {"id":"pressure_tank","display_name":"Pressure Tank","slot":"frame","tags":["spray","heavy"],"modifiers":{"damage":1,"range":4,"noise":6,"heat_limit":82},"cost":{"metal_scrap":3,"rubber_tube":1}},
+    {"id":"leaf_blower","display_name":"Leaf Blower Housing","slot":"frame","tags":["spray","motor"],"modifiers":{"damage":0,"range":5,"noise":18,"heat_limit":68},"cost":{"metal_scrap":2,"battery":1}},
+    {"id":"tendon_spring","display_name":"Tendon Spring","slot":"action","tags":["projectile","silent"],"modifiers":{"damage":8,"fire_rate":1.2,"noise":-8},"cost":{"tendon":2}},
+    {"id":"manual_pump","display_name":"Manual Pump","slot":"action","tags":["spray","reliable"],"modifiers":{"damage":2,"fire_rate":3,"noise":2},"cost":{"tendon":1,"rubber_tube":1}},
+    {"id":"battery_ignition","display_name":"Battery Ignition","slot":"action","tags":["fire","motor"],"modifiers":{"damage":6,"fire_rate":5,"noise":8},"cost":{"battery":1,"teeth":2}},
+    {"id":"bone_shards","display_name":"Bone Shards","slot":"payload","tags":["projectile","bleed"],"modifiers":{"damage":15,"spread":0.32,"noise":8},"cost":{"bone":3}},
+    {"id":"infected_fuel","display_name":"Infected Fuel","slot":"payload","tags":["spray","fire","area"],"modifiers":{"damage":9,"spread":0.2,"noise":12},"cost":{"infected_fluid":2,"cloth":1}},
+    {"id":"screaming_bait","display_name":"Screaming Bait","slot":"payload","tags":["lure","projectile"],"modifiers":{"damage":2,"spread":0.08,"noise":45},"cost":{"rotten_tissue":2,"teeth":1}},
+    {"id":"jam","display_name":"Feed Jam","slot":"flaw","tags":["mechanical"],"modifiers":{"power_bonus":4,"failure_rate":0.12},"failure":"jam"},
+    {"id":"backfire","display_name":"Backfire","slot":"flaw","tags":["fire"],"modifiers":{"power_bonus":8,"failure_rate":0.09},"failure":"backfire"},
+    {"id":"noise_spike","display_name":"Noise Spike","slot":"flaw","tags":["lure"],"modifiers":{"power_bonus":6,"failure_rate":0.14},"failure":"noise_spike"}
+  ]
+}

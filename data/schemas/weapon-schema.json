@@ -1,0 +1,9 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"weapon-schema.json",
+  "title":"Crafted Weapon Collection",
+  "type":"object",
+  "required":["schema_version","weapons"],
+  "properties":{"schema_version":{"const":1},"weapons":{"type":"array","minItems":1,"items":{"$ref":"#/$defs/weapon"}}},
+  "$defs":{"weapon":{"type":"object","additionalProperties":false,"required":["id","display_name","role","components","base","description"],"properties":{"id":{"type":"string","pattern":"^[a-z0-9_]+$"},"display_name":{"type":"string"},"role":{"type":"string"},"description":{"type":"string"},"components":{"type":"object","required":["frame","action","payload","flaw"],"properties":{"frame":{"type":"string"},"action":{"type":"string"},"payload":{"type":"string"},"mutation":{"type":"string"},"flaw":{"type":"string"}}},"base":{"type":"object","required":["damage","range","noise","fire_rate","heat_per_shot","projectiles"],"properties":{"damage":{"type":"number","minimum":0},"range":{"type":"number","exclusiveMinimum":0},"noise":{"type":"number","minimum":0},"fire_rate":{"type":"number","exclusiveMinimum":0},"heat_per_shot":{"type":"number","minimum":0},"projectiles":{"type":"integer","minimum":1}}}}}}
+}

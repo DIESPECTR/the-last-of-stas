@@ -1,0 +1,31 @@
+{
+  "id":"first_night",
+  "display_name":"First Night",
+  "duration":96,
+  "house":{"x":480,"y":480,"width":272,"height":200,"hp":1000},
+  "player":{"x":480,"y":590,"hp":100,"speed":145},
+  "starting_weapon":"bone_sprayer",
+  "starting_salvage":{"metal_scrap":40,"bone":24,"tendon":16,"rotten_tissue":48,"teeth":32,"infected_fluid":16,"rubber_tube":8,"battery":8,"cloth":20},
+  "environment":{
+    "streets":[
+      {"x":0,"y":276,"width":960,"height":88,"orientation":"horizontal"},
+      {"x":0,"y":812,"width":960,"height":72,"orientation":"horizontal"}
+    ],
+    "lamps":[
+      {"x":132,"y":272,"reach":150},
+      {"x":672,"y":272,"reach":150},
+      {"x":868,"y":650,"reach":138},
+      {"x":210,"y":48,"reach":120},
+      {"x":740,"y":848,"reach":120}
+    ],
+    "weather":{"rain":0.55,"wind":-0.32},
+    "cycle":{"dawn_from":0.62}
+  },
+  "waves":[
+    {"at":0,"count":4,"types":["glamour_drifter","office_runner","communist_nikita","lilliput"]},
+    {"at":18,"count":8,"types":["glamour_drifter","office_runner","communist_nikita","tattooed_crowd_zombie","blonde_crowd_zombie","plaid_glasses_zombie","brunette_crowd_zombie","cat_keeper","vomiting_alexander","lilliput","lumberjack_zombie"]},
+    {"at":36,"count":12,"types":["glamour_drifter","office_runner","heavy_spitter","communist_nikita","tattooed_crowd_zombie","blonde_crowd_zombie","plaid_glasses_zombie","brunette_crowd_zombie","cat_keeper","vomiting_alexander","lilliput","lumberjack_zombie"]},
+    {"at":56,"count":16,"types":["glamour_drifter","office_runner","heavy_spitter","silent_stalker","communist_nikita","tattooed_crowd_zombie","blonde_crowd_zombie","plaid_glasses_zombie","brunette_crowd_zombie","cat_keeper","vomiting_alexander","lilliput","lumberjack_zombie"]},
+    {"at":74,"count":20,"types":["glamour_drifter","office_runner","heavy_spitter","silent_stalker","bespectacled_teacher","communist_nikita","tattooed_crowd_zombie","blonde_crowd_zombie","plaid_glasses_zombie","brunette_crowd_zombie","cat_keeper","vomiting_alexander","lilliput","lumberjack_zombie"]}
+  ]
+}

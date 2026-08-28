@@ -1,0 +1,16 @@
+{
+  "night":"Night",
+  "house":"House",
+  "heat":"Heat",
+  "kills":"Kills",
+  "night_started":"The first wave heard you breathing.",
+  "night_survived":"DAWN. The house is ugly, but standing.",
+  "house_lost":"THE HOUSE IS LOST. Excellent data, terrible outcome.",
+  "weapon_jammed":"WEAPON JAMMED — press R to clear it.",
+  "weapon_overheated":"OVERHEATED — the barrel is glowing. Press R and let it breathe.",
+  "weapon_backfired":"BACKFIRE — that shot went the wrong way.",
+  "weapon_noise_spike":"NOISE SPIKE — every dead thing heard that.",
+  "failure_cleared":"Failure cleared. Confidence unjustified.",
+  "missing_salvage":"Not enough salvage. Go recycle more zombies.",
+  "equipped":"Equipped: {weapon}"
+}

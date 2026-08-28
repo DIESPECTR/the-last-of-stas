@@ -1,0 +1,17 @@
+---
+SECTION_ID: files.assets.zombies.friends.animation.silent_stalker_attack_down_webp
+TYPE: file/video
+---
+
+# Silent Stalker Attack Down
+
+FILE: assets/zombies/friends/animation/silent_stalker_attack_down.webp
+WIDTH: 768
+HEIGHT: 768
+UTILITY: wan
+IMAGE_URL: assets/zombies/friends/silent_stalker_master.png
+USAGE: Source animation clip for the down-facing attack 4x4 sprite sheet.
+PROMPT: |
+  Animate only the down-facing character from the supplied 2x2 master as a clean seamless looping game animation.
+  Preserve exact identity, long dark hair, narrow upright silhouette, dark outfit, proportions, framing, camera, scale and stable feet position.
+  Add two restrained forward arm motions and a small recoil; no travel across frame. Static camera, no extra people, no text, no props, no weapons, no gore, plain background.

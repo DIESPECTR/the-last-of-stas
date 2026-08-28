@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "weapons": [
+    {"id":"bone_sprayer","display_name":"Song Blaster","role":"crowd_control","components":{"frame":"metal_pipe","action":"tendon_spring","payload":"bone_shards","flaw":"jam"},"base":{"damage":8,"range":200,"noise":145,"fire_rate":2.4,"heat_per_shot":12,"projectiles":5},"description":"A speaker cone, plumbing pipe and bad reviews compressed into one anti-hater blast."},
+    {"id":"corpse_burner","display_name":"The Corpse Burner","role":"area_denial","components":{"frame":"pressure_tank","action":"battery_ignition","payload":"infected_fuel","flaw":"backfire"},"base":{"damage":7,"range":230,"noise":185,"fire_rate":8,"heat_per_shot":6,"projectiles":2},"description":"Excellent against the dead. Negotiable against the house."},
+    {"id":"crying_hedgehog","display_name":"Crying Hedgehog","role":"zombie_lure","components":{"frame":"leaf_blower","action":"manual_pump","payload":"screaming_bait","flaw":"noise_spike"},"base":{"damage":4,"range":280,"noise":310,"fire_rate":3.5,"heat_per_shot":9,"projectiles":1},"description":"Weaponized panic in a garden appliance."}
+  ]
+}

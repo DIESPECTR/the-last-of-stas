@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <!-- Title is duplicated in locales/ru.json under game_title; game.js overwrites document.title from the
+       locale on boot so the tab and the on-page heading can never drift apart. This literal is only what
+       the user sees during the few milliseconds before the locale JSON resolves. -->
+  <title>The Last of Stas</title>
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <main>
+    <!-- Every visible string carries data-i18n and is filled from locales/ru.json by applyStaticStrings().
+         The literals kept inline are the pre-hydration fallback, so the layout never flashes empty boxes. -->
+    <header><div class="title-block"><span class="chapter" data-i18n="chapter">ПОЛЕВОЙ ДНЕВНИК · НОЧЬ 01</span><h1 data-i18n="game_title">THE LAST OF STAS</h1><p data-i18n="tagline">Дом ещё стоит и песня Зомбэ ещё играет.</p></div><div class="header-actions"><button id="raid-open" class="raid-entry" data-i18n="btn_hater_raid">ИГРАТЬ ЗА ЗОМБИ</button><button id="reel" data-i18n="btn_reel">РЕЛСЫ</button><button id="cinema" data-i18n="btn_cinema">НА ВЕСЬ ЭКРАН</button><button id="start" data-i18n="btn_play_song">ВКЛЮЧИТЬ ПЕСНЮ ЗОМБИ</button></div></header>
+    <button type="button" id="cinema-exit" class="cinema-exit" data-i18n="btn_cinema_exit">ОКНО</button>
+    <section id="game-scene" class="game-scene" aria-live="polite" aria-modal="true" role="dialog">
+      <div class="game-scene-shell">
+        <span id="scene-kicker" class="scene-kicker">THE LAST OF STAS · ВЫБОР СТОРОНЫ</span>
+        <h2 id="scene-title">КТО ТЫ В ЭТОЙ ПЕСНЕ?</h2>
+        <p id="scene-copy">Защити песню вместе со Стасом — или стань хейтером и доберись до колонки.</p>
+        <div id="scene-cards" class="scene-cards">
+          <button type="button" class="scene-card scene-card-stas" data-scene-action="stas">
+            <img src="assets/ui/start/stas-mode.png?v=3" alt="Стас с дробовиком стоит на колонке и защищает песню от зомби">
+            <span><b>ИГРАТЬ ЗА СТАСА</b><small>Включи «ЗОМБИ» и доживи до утра</small></span>
+          </button>
+          <button type="button" class="scene-card scene-card-zombie" data-scene-action="zombie">
+            <img src="assets/ui/start/zombie-mode.png?v=1" alt="Толпа зомби идёт на дом Стаса">
+            <span><b>ИГРАТЬ ЗА ЗОМБИ</b><small>Сломай колонку и выключи песню</small></span>
+          </button>
+        </div>
+        <div id="scene-result" class="scene-result" hidden>
+          <img id="scene-result-image" src="" alt="">
+          <div class="scene-result-copy"><span id="scene-stamp" class="scene-stamp"></span><h3 id="scene-result-title"></h3><p id="scene-result-copy"></p></div>
+        </div>
+        <div id="scene-actions" class="scene-actions" hidden>
+          <button type="button" data-scene-action="menu">ВЫБРАТЬ СТОРОНУ</button>
+          <button type="button" class="scene-primary" data-scene-action="retry">ЕЩЁ РАЗ</button>
+        </div>
+      </div>
+    </section>
+    <section id="raid-picker" class="raid-picker" hidden aria-label="Выбор зомби для хейтерского рейда">
+      <div class="raid-picker-card"><span class="page-mark">ОТДЕЛЬНЫЙ РЕЖИМ · ХЕЙТЕРСКИЙ РЕЙД</span><h2>КТО СЕГОДНЯ ЛОМАЕТ КОЛОНКУ?</h2><p>Выбери зомби, доберись до дома и разнеси колонку. Комментарии бесят Стаса — чем сильнее хейт, тем быстрее он стреляет.</p><div class="raid-tabs" role="tablist" aria-label="Группы зомби"><button type="button" id="raid-tab-originals" role="tab" aria-controls="raid-roster" aria-selected="true">НАШИ ЗОМБИ</button><button type="button" id="raid-tab-specials" role="tab" aria-controls="raid-roster" aria-selected="false" tabindex="-1">АРХЕТИПЫ</button></div><div id="raid-roster" class="raid-roster" role="tabpanel" aria-label="Выбери зомби"></div><div class="raid-picker-actions"><button id="raid-close">НАЗАД</button><button id="raid-start">НАЧАТЬ РЕЙД</button></div></div>
+    </section>
+    <section class="layout">
+      <div class="game-column">
+        <div class="game-wrap"><canvas id="game" width="960" height="600"></canvas><div id="status" data-i18n="status_reading">Осматриваем двор…</div><div id="raid-controls" class="raid-controls" hidden><div class="raid-controls-head"><b>ВЫБЕРИ, ЧТО КРИКНУТЬ СТАСУ</b><button id="raid-exit">ВЫЙТИ</button></div><div id="raid-taunts" class="raid-taunts"></div><small>1 / 2 / 3 · КОММЕНТАРИЙ &nbsp; SPACE / ЛКМ · ЛОМАТЬ КОЛОНКУ</small></div><div class="sketch-note note-house" data-i18n="note_house">ДОМ</div><div class="sketch-note note-road" data-i18n="note_road">ОНИ ИДУТ ОТСЮДА</div></div>
+        <div class="field-strip"><span data-i18n="key_move">WASD · ХОДЬБА</span><span data-i18n="key_aim">МЫШЬ · ПРИЦЕЛ</span><span data-i18n="key_fire">ЛКМ · ОГОНЬ</span><span data-i18n="key_music">F У КОЛОНКИ · ПЕСНЯ ЗОМБИ</span></div>
+      </div>
+    </section>
+    <footer data-i18n="footer">Тихая подготовка. Короткое насилие. Считай, что осталось.</footer>
+  </main>
+  <script type="module" src="src/game.js"></script>
+</body>
+</html>
