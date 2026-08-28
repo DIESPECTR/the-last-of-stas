@@ -167,6 +167,17 @@
       "drop": {"cloth": 1, "bone": 1}
     },
     {
+      "id": "dog_handler_zombie",
+      "display_name": "Dog Handler Zombie",
+      "hp": 66,
+      "speed": 36,
+      "damage": 5,
+      "attack_interval": 1.75,
+      "radius": 13,
+      "color": "#71878a",
+      "drop": {"cloth": 1, "tendon": 1, "teeth": 1}
+    },
+    {
       "id": "vomiting_alexander",
       "display_name": "Vomiting Alexander",
       "hp": 70,
