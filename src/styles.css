@@ -94,6 +94,26 @@ html.reel,html.reel body{height:100%;position:fixed;inset:0;width:100%}
 @media(max-width:560px){
   header{grid-template-columns:1fr;gap:8px}.title-block{display:grid;grid-template-columns:auto 1fr;align-items:end;column-gap:10px}.title-block .chapter{grid-column:1/-1}.title-block p{margin:0 0 2px}.header-actions{grid-template-columns:1fr 1fr}.header-actions #cinema{grid-column:1/-1}.header-actions button{min-height:40px}
 }
+/* Real phones get a deliberate stop screen instead of a cramped version of the desktop game. */
+.mobile-gate{display:none}
+html.mobile-device,html.mobile-device body{width:100%;height:100%;overflow:hidden}
+html.mobile-device body>main{display:none!important}
+html.mobile-device .mobile-gate{position:fixed;z-index:1000;inset:0;display:grid;place-items:center;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));overflow:auto;background:radial-gradient(circle at 50% 18%,#243027 0,#0c100d 46%,#050605 100%)}
+.mobile-gate:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");mix-blend-mode:soft-light}
+.mobile-gate-card{position:relative;width:min(100%,430px);max-height:calc(100dvh - 28px);display:grid;grid-template-rows:minmax(0,54dvh) auto;overflow:hidden;background:#10130f;border:1px solid #596052;border-top:3px solid var(--moss-bright);box-shadow:0 28px 90px #000,0 0 0 1px #ffffff0a}
+.mobile-gate-photo{position:relative;min-height:0;overflow:hidden;background:#080a08}
+.mobile-gate-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 48%,#10130f 100%);pointer-events:none}
+.mobile-gate-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 40%;filter:saturate(.82) contrast(1.08)}
+.mobile-gate-photo span{position:absolute;z-index:1;left:12px;top:12px;padding:6px 8px;color:#11140f;background:var(--moss-bright);font:700 8px/1 'IBM Plex Mono';letter-spacing:.11em;transform:rotate(-1.5deg)}
+.mobile-gate-copy{position:relative;padding:0 20px 22px;margin-top:-8px}
+.mobile-gate-kicker{display:block;margin-bottom:8px;color:var(--moss-bright);font:600 8px/1.3 'IBM Plex Mono';letter-spacing:.15em}
+.mobile-gate h1{font-size:clamp(38px,12vw,58px);line-height:.82;letter-spacing:.025em;text-shadow:0 4px 20px #000}
+.mobile-gate p{margin:15px 0 17px;color:#c7c9c0;font-size:13px;line-height:1.55}
+.mobile-gate-stamp{padding:10px 12px;border:1px solid #555d51;border-left:3px solid var(--rust);color:#e7e4da;background:#181b17;font:700 10px/1.3 'IBM Plex Mono';letter-spacing:.08em;text-align:center}
+@media(orientation:landscape) and (max-height:620px){
+  .mobile-gate-card{width:min(760px,calc(100vw - 28px));height:calc(100dvh - 28px);grid-template-columns:minmax(220px,.85fr) 1fr;grid-template-rows:1fr}
+  .mobile-gate-copy{align-self:center;margin:0;padding:20px}.mobile-gate h1{font-size:clamp(36px,8vw,54px)}.mobile-gate p{margin:12px 0;font-size:11px}
+}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 
 /* Hater Raid — separate reverse-role mode. It reuses the field-journal palette, but the acid red

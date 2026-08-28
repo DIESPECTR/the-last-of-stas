@@ -174,6 +174,15 @@ function tileTextureRow(ctx,entry,x,y,width,height){
   ctx.restore();
 }
 
+// Hater Raid reuses the same authored fence cutout as the neighbourhood instead of introducing a new asset.
+// Returns false only while the texture is unavailable so the game can draw a cheap plank fallback.
+export function drawFenceTextureRow(ctx,env,x,y,width,height=52){
+  const entry=texture(env,'fence');
+  if(!entry)return false;
+  tileTextureRow(ctx,entry,x,y,width,height);
+  return true;
+}
+
 // Cached Canvas pattern for the ground and road tiles.
 // A single repeated tile makes the yard read as a grid of identical slabs. Mirroring was tried first and
 // was worse: flipped neighbours create obvious butterfly symmetry. Instead the pattern cell is a 3×3

@@ -5,8 +5,8 @@ TYPE: file/video
 UTILITY: video_background_removal
 FILE: assets/zombies/new-batch-01/processed/injured_kuok_walk_right_alpha.webm
 VIDEO-INPUT: assets/zombies/new-batch-01/animation-api/injured_kuok_walk_right.mp4
-MODEL: veed_fast
-PROMPT: Remove the plain background from the animated injured boss; retain face, cast, crutch and body edges.
+MODEL: bria
+PROMPT: Remove only the plain scene background. Preserve the complete injured KUOK boss silhouette in every frame, especially all black stagewear, dark trousers, boots, tattoos, face, oversized white cast and both metal crutches. Do not treat black clothing as background.
 BACKGROUND_COLOR: Transparent
 OUTPUT_CONTAINER_AND_CODEC: webm_vp9
 PRESERVE_AUDIO: false

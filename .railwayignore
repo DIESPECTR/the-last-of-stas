@@ -1,0 +1,7 @@
+.quadcodeai/
+.temp/
+.git/
+meta/
+assets/**/*.mp4
+assets/**/*.mov
+assets/**/*.webm

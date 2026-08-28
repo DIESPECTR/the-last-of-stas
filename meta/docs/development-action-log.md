@@ -1316,3 +1316,47 @@ Purpose: chronological source material for a future development scenario/video s
 - Added `Caddyfile`: static root `/usr/share/caddy`, compression, SPA fallback to `index.html`, and `:{$PORT:8080}` listener.
 - Updated `Dockerfile` to install that config and expose the matching 8080 fallback.
 - Deployment itself remains blocked until a valid Railway workspace API token is supplied; Railway CLI returned `Unauthorized` for the previous credentials.
+
+### 73. Retried Railway API-token deployment only — 2026-08-28
+- Retested the latest supplied Railway credential directly through Railway CLI with `RAILWAY_TOKEN`; no browser login was used.
+- `railway whoami` returned `Unauthorized`, so the CLI cannot initialise a project or submit a deploy with this token.
+- Verified that the CLI does not accept a per-command `whoami --token` override; the supported token path is `RAILWAY_TOKEN`, which is the path used for the failed direct auth test.
+- Repository is ready for deploy: GitHub `main` includes the dynamic-PORT Caddy configuration at commit `7824f75` and the Dog Handler runtime/sheet fixes.
+
+### 74. Deployed The Last of Stas to Railway and verified production — 2026-08-28
+- Identified the Railway credential mismatch: the third account token authenticates through `RAILWAY_API_TOKEN`; `railway whoami` succeeded as the expected account. No browser login was used.
+- Created Railway project `the-last-of-stas` and service `the-last-of-stas-web`.
+- Direct `railway up` uploads failed with HTTP 413 because the IDE working tree included a 567 MB private chat artifact; a clean tracked archive was also too large due to non-runtime media sources.
+- Switched to Railway's GitHub source flow and connected `DIESPECTR/the-last-of-stas`, branch `main`, directly to the web service. Railway built commit `7824f75` from the repository using the project Dockerfile and `caddy:2-alpine`; the image build and push completed.
+- Generated the public domain: `https://the-last-of-stas-web-production.up.railway.app`.
+- Production browser check passed: the mode-selection screen loaded, Russian UI hydrated, and the game canvas initialized at 1920×1200.
+- Verified the custom-zombie picker in production: the originals tab contains 11 cards, **«ЗОМБИ С СОБАКОЙ»** is selectable, its 1024×1536 concept portrait loads, and starting the raid reveals the raid HUD with 135 zombie HP and 156 speaker HP.
+- Verified all 12 deployed Dog Handler sheets (`idle/walk/attack × down/left/right/up`) return HTTP 200 with non-zero payloads. The live raid requested the versioned Dog Handler runtime sheet successfully.
+- Final production console check found no `error`, `failed`, `404`, `TypeError`, or `ReferenceError` entries.
+
+## 2026-08-28 — Lumberjack/Lilliput alpha artifact repair and KUOK picker order
+
+1. Traced the black-square rendering artifacts to opaque exterior backgrounds embedded in Lumberjack and Lilliput animation sheets rather than Canvas layer ordering.
+2. Cleaned the exterior black backgrounds from all 12 Lumberjack sheets and all 12 Lilliput sheets while preserving character pixels and 4×4 frame layout.
+3. Found four Lilliput sheets (`idle_left`, `idle_up`, `walk_down`, `walk_up`) that still had fully opaque grayscale backgrounds after the first color-key pass; reran those four through the inspected rembg transparency workflow.
+4. Revalidated all 24 PNG sheets: every file is 512×512 RGBA, contains partial transparency, and all 16 128×128 cells remain occupied.
+5. Moved `injured_kuok` from the last slot to index 1 in the `НАШИ ЗОМБИ` raid picker, directly after Communist Nikita.
+6. Browser-audited all 24 runtime asset URLs: 24/24 loaded at 512×512; picker audit returned `injured_kuok` at index 1. Launched separate Lumberjack and Lilliput raids and captured the live Canvas: both characters rendered without black/checkerboard rectangles; a clean reload produced no console errors.
+7. Updated both the hydrated Russian locale and pre-hydration menu fallback from `ИГРАТЬ ЗА ЗОМБИ` to `ИГРАТЬ ЗА ЗОНБЕ`.
+
+## 2026-08-28 — Hater Raid finalization and release QA
+
+1. Rebuilt Hater Raid as four checkpoints: yard, destructible fence, house entry, speaker attack.
+2. Split the visible fence into eight independently destructible and collidable sections; destroyed sections now become real passages.
+3. Distributed companion AI across fence sections so the crowd damages the whole barrier instead of one invisible center point.
+4. Added contextual idle hints for movement, fence attack, house entry and speaker attack; companion hits no longer reset the player hint timer.
+5. Added stage-clear boosts, combo feedback and stage-scaled Stas pressure without introducing new animation dependencies.
+6. Ran controlled browser victory regression: all eight fence sections reached zero HP, the player crossed the breach, entered the house and destroyed the speaker; final phase was `won` after 7 speaker attacks.
+7. Ran controlled browser defeat regression with `office_runner`: Stas reduced player HP from 1 to 0 and final phase became `lost`.
+8. Installed a runtime stage watchpoint and inspected transitions `0→1→2→3`, player coordinates, fence HP/breach state and call stacks; transitions matched yard, fence breach and house entry checkpoints.
+9. Loaded and validated all 204 runtime zombie sheets for 17 selectable types: 204/204 loaded, all were 512×512, all had alpha and all 16 cells contained visible pixels.
+10. Re-tested KUOK as the playable zombie: `injured_kuok` remained visible during `walk_left`; animation time advanced and all 16 companions continued updating.
+11. Verified distributed companion fence damage across multiple sections and confirmed intact-section collision plus passage through destroyed sections.
+12. Verified mobile device gate implementation and desktop boot path; mobile devices receive the full-screen Stas laptop message before the game UI.
+13. Ran `node --check src/game.js`, `node --check src/hater-raid.js` and `git diff --check`; all passed.
+14. Searched production paths for `TEMP DEBUG:` markers and checked the clean browser console; none were found.

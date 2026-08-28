@@ -1,4 +1,4 @@
-import {createEnvironment,updateEnvironment,drawEnvironmentGround,drawLampPosts,drawEnvironmentOverlay,drawShelterBarricades,drawTrapSprite,drawShelterSprite,drawRoofSprite,drawDestructibleSprite} from './environment.js';
+import {createEnvironment,updateEnvironment,drawEnvironmentGround,drawLampPosts,drawEnvironmentOverlay,drawShelterBarricades,drawTrapSprite,drawShelterSprite,drawRoofSprite,drawDestructibleSprite,drawFenceTextureRow} from './environment.js';
 import {createDestructibles,updateDestructibles,damageProp,propAt,blocksShot,drawDestructibles,propKinds} from './destructibles.js';
 import {updateTurrets,damageTurret,turretNear,drawTurrets,turretStats,turretRange} from './turrets.js';
 import {createAudio,playSound} from './audio.js';
@@ -8,7 +8,7 @@ import {drawCastShadows,drawInteriorLight,drawGrade,beginLightPass,endLightPass,
 import {createBlood,updateBlood,spurt,gush,splatterWall,dripTrail,drawBloodGround,drawBloodSplatter,drawBloodDrops} from './blood.js';
 import {createSpeakers,blareSpeakers,stopSpeakers,updateSpeakers,drawSpeakers,drawSpeakerWaves,speakerNear,speakerPosition} from './music.js';
 import {armTaunt,updateTaunts,drawTaunts,resetTaunts,TAUNT_LINES} from './taunts.js';
-import {RAID_ROSTER,RAID_TABS,raidStatsFor,createHaterRaid,updateHaterRaid,attackRaidSpeaker,shoutRaidTaunt} from './hater-raid.js';
+import {RAID_ROSTER,RAID_TABS,RAID_STAGES,raidStatsFor,createHaterRaid,updateHaterRaid,attackRaidSpeaker,shoutRaidTaunt} from './hater-raid.js';
 import {wantsReel,isReel,frameRect,applyCanvasSize,worldFromClient,beginReelFrame,setReel,setReelUrl} from './reel.js';
 const $=s=>document.querySelector(s),canvas=$('#game'),ctx=canvas.getContext('2d');
 // Gameplay lives in a 960×960 WORLD. Desktop crops the middle 960×600; reel shows the full height.
@@ -146,7 +146,7 @@ const ZOMBIE_DRAW_SIZE={drifter:72,runner:64,spitter:82,glamour_drifter:72,offic
 const FRIEND_SUMMON_TYPES=['glamour_drifter','office_runner','heavy_spitter','silent_stalker','boss_zombie','bespectacled_teacher'];
 const BOSS_PHASES=[.75,.5,.25];
 const animationSheets=new Map();
-const ANIMATION_ASSET_REV='20260828-dog-handler-sheets-v1';
+const ANIMATION_ASSET_REV='20260828-kuok-alpha-v3';
 function animationSheet(character,action,direction){const key=`${character}/${action}_${direction}`;let image=animationSheets.get(key);if(!image){image=new Image();image.src=`assets/animations/sheets/${key}.png?v=${ANIMATION_ASSET_REV}`;animationSheets.set(key,image)}return image}
 function advanceAnimation(entity,action,dt){if(entity.animAction!==action){entity.animAction=action;entity.animTime=0}else entity.animTime=(entity.animTime||0)+dt;return action}
 function drawAnimatedSprite(target,character,action,direction,x,y,size,time,{tint=null,shadow=8,rim=null,rimAlpha=.45}={}){
@@ -323,7 +323,7 @@ function setRaidTab(tab,{focus=false}={}){
 function renderRaidRoster({focusSelected=false,resetScroll=false}={}){
   const box=$('#raid-roster');if(!box)return;
   const ids=RAID_TABS[activeRaidTab]||RAID_ROSTER;
-  box.setAttribute('aria-label',activeRaidTab==='originals'?'Наши зомби — выбери зомби':'Архетипы зомби — выбери зомби');
+  box.setAttribute('aria-label',activeRaidTab==='originals'?'Новые зомби — выбери зомби':'Старые зомби — выбери зомби');
   box.innerHTML=ids.map(id=>{const z=zombieTypes.get(id),stats=raidStatsFor(z),selected=id===selectedRaidZombie,name=RAID_NAMES[id]||z.display_name,portrait=RAID_PORTRAITS[id],fallback=RAID_PORTRAIT_FALLBACKS[id];return `<button type="button" class="raid-zombie ${selected?'selected':''}" data-zombie="${id}" aria-pressed="${selected}"><span class="raid-zombie-preview"><img src="${portrait}?v=portrait-20260828-2" alt="${name} — концепт-портрет зомби" onerror="if(this.dataset.fallback!=='1'){this.dataset.fallback='1';this.src='${fallback}?v=portrait-fallback-1'}"></span><span class="raid-zombie-copy"><b>${name}</b><span>HP ${stats.maxHp} · СКОРОСТЬ ${z.speed}<br>УРОН ПО КОЛОНКЕ ${stats.attackDamage}</span></span></button>`}).join('');
   if(resetScroll)box.scrollTop=0;
   for(const button of box.querySelectorAll('button'))button.onclick=()=>{selectedRaidZombie=button.dataset.zombie;renderRaidRoster({focusSelected:true})};
@@ -337,6 +337,8 @@ function closeHaterRaidPicker(){$('#raid-picker').hidden=true}
 function startHaterRaid(){
   // The raid starts from this user gesture: unlock WebAudio first, then let Stas switch the song on.
   currentResult=null;audio.unlock?.();reset();closeHaterRaidPicker();
+  // Never inherit held movement/fire from the menu or a previous run.
+  mouse.down=false;held.clear();stick.dx=0;stick.dy=0;
   haterRaid=createHaterRaid(selectedRaidZombie,WORLD,state.shelter,speakerPosition(state.shelter),zombieTypes);
   blareSpeakers(speakers);
   state.player.x=haterRaid.stas.x;state.player.y=haterRaid.stas.y;state.player.heat=0;state.player.failed=false;
@@ -349,6 +351,12 @@ function useRaidTaunt(index){
   if(!haterRaid||!raidTaunts[index])return;
   if(shoutRaidTaunt(haterRaid,raidTaunts[index])){sfx('growl');setStatus(`ПРОВОКАЦИЯ +20 · СТАС СТРЕЛЯЕТ БЫСТРЕЕ`,1.1);rollRaidTaunts()}
 }
+if(DEV_MODE)window.__haterRaidState=()=>haterRaid;
+if(DEV_MODE)window.__haterRaidDebug=()=>haterRaid?{
+  active:haterRaid.active,phase:haterRaid.phase,type:haterRaid.type,stageIndex:haterRaid.stageIndex,
+  player:{id:haterRaid.player.id,x:haterRaid.player.x,y:haterRaid.player.y,hp:haterRaid.player.hp,animAction:haterRaid.player.animAction,animTime:haterRaid.player.animTime},
+  fence:{...haterRaid.fence},speaker:{...haterRaid.speaker},companions:haterRaid.companions.map(({id,x,y,hp,animAction,animTime})=>({id,x,y,hp,animAction,animTime}))
+}:null;
 // Screen shake and hit-stop: the cheapest juice in the genre. Shake is a decaying sine offset applied
 // to the whole world transform — deterministic, so it cannot jitter differently on the two axes and
 // read as a rendering fault. Hit-stop freezes the SIMULATION for a few frames while the renderer keeps
@@ -1058,6 +1066,34 @@ function drawNinjaAlly(){
   // Marker sits below the feet: labels above a defender are masked by the house roof when they guard a window.
   ctx.save();ctx.textAlign='center';ctx.font='bold 9px "Chivo Mono",monospace';ctx.fillStyle='#9fe8f1';ctx.fillText('СОЮЗНИК · НИНДЗЯ',ally.x,ally.y+size*.56);ctx.restore();
 }
+function drawRaidFence(){
+  if(!haterRaid?.active||!haterRaid.fence)return;
+  const fence=haterRaid.fence;
+  const sections=fence.sections||[{left:fence.x-fence.width/2,right:fence.x+fence.width/2,hp:fence.hp,maxHp:fence.maxHp,hitFlash:fence.hitFlash}];
+  ctx.save();
+  for(const section of sections){
+    const width=section.right-section.left,ratio=Math.max(0,section.hp/section.maxHp);
+    if(section.hp>0){
+      if(!drawFenceTextureRow(ctx,environment,section.left,fence.y-46,width,52)){
+        ctx.strokeStyle='#66553d';ctx.lineWidth=5;
+        for(let x=section.left+10;x<section.right;x+=24){ctx.beginPath();ctx.moveTo(x,fence.y+4);ctx.lineTo(x+((x/24)%2?4:-4),fence.y-40);ctx.stroke()}
+        ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(section.left,fence.y-12);ctx.lineTo(section.right,fence.y-16);ctx.stroke();
+      }
+      if(ratio<.67){ctx.fillStyle=`rgba(39,20,14,${.12+(1-ratio)*.32})`;ctx.fillRect(section.left,fence.y-46,width,50)}
+      if(section.hitFlash>0){ctx.fillStyle='rgba(255,226,170,.28)';ctx.fillRect(section.left,fence.y-48,width,54)}
+      if(ratio<.35){ctx.strokeStyle='#2a1812';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(section.left+width*.25,fence.y-42);ctx.lineTo(section.left+width*.55,fence.y-18);ctx.lineTo(section.left+width*.4,fence.y+2);ctx.stroke()}
+    }else{
+      ctx.fillStyle='rgba(70,52,35,.78)';
+      ctx.fillRect(section.left+5,fence.y-4,width*.38,6);ctx.fillRect(section.left+width*.55,fence.y-2,width*.32,5);
+    }
+  }
+  const ratio=Math.max(0,fence.hp/fence.maxHp);
+  ctx.fillStyle='rgba(10,10,8,.82)';ctx.fillRect(fence.x-58,fence.y-62,116,15);
+  ctx.fillStyle='#211d18';ctx.fillRect(fence.x-52,fence.y-57,104,5);
+  ctx.fillStyle=ratio<.35?'#b44737':'#947348';ctx.fillRect(fence.x-52,fence.y-57,104*ratio,5);
+  ctx.font='bold 9px "Chivo Mono",monospace';ctx.textAlign='center';ctx.fillStyle='#e6dfcb';ctx.fillText(`ЗАБОР ${sections.filter(section=>section.hp>0).length}/${sections.length}`,fence.x,fence.y-65);ctx.textAlign='start';
+  ctx.restore();
+}
 function drawSecondDefender(){
   if(!state.secondDefender||haterRaid?.active)return;
   const ally=state.secondDefender,size=82;
@@ -1091,6 +1127,8 @@ function draw(){
   // Scavenged stakes along the four walls: they mark where the horde has to stop, without the old
   // dashed rings that made the defence read as a diagram instead of a yard.
   drawShelterBarricades(ctx,environment,state.shelter,state.defenses);
+  // Hater Raid inserts one readable destructible lane between spawn and house using the existing fence art.
+  drawRaidFence();
   // Yard props: the wrecked car, the fuel barrels, the crates and the fence. Drawn before the entities
   // so anybody walking past passes IN FRONT of them, and handed the environment's sprite hook so each
   // prop paints its photographic cutout for its current state and falls back to the procedural shape.
@@ -1153,7 +1191,9 @@ function draw(){
   if(haterRaid?.active){
     const raidBodies=[...(haterRaid.companions||[]),haterRaid.player];
     for(const rz of raidBodies){
-      const selected=rz===haterRaid.player,direction=directionCell(rz.faceAngle),base=ZOMBIE_DRAW_SIZE[rz.id]||72,size=base*(ANIM_SCALE[rz.id]||1);
+      const selected=rz===haterRaid.player,direction=directionCell(rz.faceAngle),base=ZOMBIE_DRAW_SIZE[rz.id]||72;
+      // KUOK is boss-sized only in Stas defence. In Hater Raid he is a normal playable body.
+      const size=rz.id==='injured_kuok'?78:base*(ANIM_SCALE[rz.id]||1);
       drawAnimatedSprite(ctx,rz.id,rz.animAction||'idle',direction,rz.x,rz.y,size,rz.animTime,{tint:rz.hitFlash>0?'#e7d8bbaa':null,shadow:selected?10:8,rim:selected?'#b5d8a0':null,rimAlpha:selected?.42:0})
         ||drawDirectionSprite(ctx,zombieSheets.get(rz.id),direction,rz.x,rz.y,base,{tint:rz.hitFlash>0?'#e7d8bbaa':null,shadow:selected?10:8,rim:selected?'#b5d8a0':null,rimAlpha:selected?.42:0});
       const hp=Math.max(0,rz.hp/rz.maxHp),barWidth=selected?68:42,barHeight=selected?5:3;
@@ -1275,24 +1315,35 @@ function drawRaidMeter(x,y,w,label,value,max,color,detail,thresholds=[]){
 function drawRaidHUD(view,r){
   const compact=view.w<520,margin=compact?10:14,w=Math.min(compact?view.w-margin*2:430,view.w-margin*2),x=margin,y=compact?10:16;
   const rage=Math.max(0,Math.min(100,r.provocation)),danger=rage>=70,phaseText=r.phase==='active'?'РЕЙД ИДЁТ':r.phase==='won'?'ЦЕЛЬ УНИЧТОЖЕНА':'РЕЙД ПРОВАЛЕН';
+  const stage=RAID_STAGES[r.stageIndex]||RAID_STAGES[0],boostText=r.boost?.time>0?`${r.boost.label} ${r.boost.time.toFixed(1)}с`:null;
   const h=compact?142:126;
   ctx.fillStyle='rgba(11,13,12,.92)';ctx.fillRect(x,y,w,h);
   ctx.strokeStyle=danger?'#a94734':'#50564c';ctx.lineWidth=danger?2:1;ctx.strokeRect(x+.5,y+.5,w-1,h-1);
   ctx.fillStyle=danger?'#a94734':'#8d9a68';ctx.fillRect(x,y,3,h);
   ctx.font='700 11px "Chivo Mono",monospace';ctx.fillStyle='#e7e4da';ctx.fillText(`${RAID_NAMES[r.type]||r.type} · ${phaseText}`,x+12,y+17);
-  ctx.font='600 9px "Chivo Mono",monospace';ctx.fillStyle='#999d91';ctx.fillText('ЦЕЛЬ: ДОБЕРИСЬ ДО ДОМА И РАЗНЕСИ КОЛОНКУ',x+12,y+33);
-  const innerX=x+12,innerW=w-24;
+  ctx.font='600 9px "Chivo Mono",monospace';ctx.fillStyle='#c1bcae';ctx.fillText(`ЭТАП ${r.stageIndex+1}/4 · ${stage.objective}`,x+12,y+33);
+  ctx.textAlign='right';ctx.fillStyle=boostText?'#d8b86d':'#777d72';ctx.fillText(boostText||`КОМБО ×${r.combo||0}`,x+w-12,y+33);ctx.textAlign='left';
+  const innerX=x+12,innerW=w-24,objective=r.stageIndex===1&&r.fence.hp>0?r.fence:r.speaker;
+  const objectiveLabel=objective===r.fence?'ЗДОРОВЬЕ ЗАБОРА':'ЗДОРОВЬЕ КОЛОНКИ';
   if(compact){
     drawRaidMeter(innerX,y+49,innerW,'ЗДОРОВЬЕ ЗОМБИ',r.player.hp,r.player.maxHp,r.player.hp/r.player.maxHp<.3?'#a94734':'#8d9a68',`${Math.ceil(r.player.hp)} / ${r.player.maxHp}`,[.3]);
-    drawRaidMeter(innerX,y+73,innerW,'ЗДОРОВЬЕ КОЛОНКИ',r.speaker.hp,r.speaker.maxHp,'#b65a43',`${Math.ceil(r.speaker.hp)} / ${r.speaker.maxHp}`);
+    drawRaidMeter(innerX,y+73,innerW,objectiveLabel,objective.hp,objective.maxHp,'#b65a43',`${Math.ceil(objective.hp)} / ${objective.maxHp}`);
     drawRaidMeter(innerX,y+97,innerW,'ПРОВОКАЦИЯ',rage,100,danger?'#c34c37':'#9b7d45',`${Math.round(rage)}%`,[.4,.7]);
     ctx.fillStyle=danger?'#d77560':'#999d91';ctx.fillText(danger?'СТАС В ЯРОСТИ · ОГОНЬ УСИЛЕН':'КОММЕНТАРИИ УСКОРЯЮТ ОГОНЬ СТАСА',innerX,y+132);
   }else{
     const gap=16,colW=(innerW-gap)/2;
     drawRaidMeter(innerX,y+51,colW,'ЗОМБИ',r.player.hp,r.player.maxHp,r.player.hp/r.player.maxHp<.3?'#a94734':'#8d9a68',`${Math.ceil(r.player.hp)} / ${r.player.maxHp}`,[.3]);
-    drawRaidMeter(innerX+colW+gap,y+51,colW,'КОЛОНКА',r.speaker.hp,r.speaker.maxHp,'#b65a43',`${Math.ceil(r.speaker.hp)} / ${r.speaker.maxHp}`);
+    drawRaidMeter(innerX+colW+gap,y+51,colW,objective===r.fence?'ЗАБОР':'КОЛОНКА',objective.hp,objective.maxHp,'#b65a43',`${Math.ceil(objective.hp)} / ${objective.maxHp}`);
     drawRaidMeter(innerX,y+79,innerW,'ПРОВОКАЦИЯ',rage,100,danger?'#c34c37':'#9b7d45',`${Math.round(rage)}%`,[.4,.7]);
     ctx.fillStyle=danger?'#d77560':'#999d91';ctx.fillText(danger?'СТАС В ЯРОСТИ · ОГОНЬ УСИЛЕН':'КОММЕНТАРИИ УСКОРЯЮТ ОГОНЬ СТАСА',innerX,y+116);
+  }
+  if(r.hint?.text){
+    ctx.font='700 12px "Chivo Mono",monospace';
+    const hintW=Math.min(view.w-24,Math.max(230,ctx.measureText(r.hint.text).width+32));
+    const hintX=(view.w-hintW)/2,hintY=view.h-(compact?94:58);
+    ctx.fillStyle='rgba(9,11,10,.9)';ctx.fillRect(hintX,hintY,hintW,34);
+    ctx.strokeStyle='#a98b4d';ctx.strokeRect(hintX+.5,hintY+.5,hintW-1,33);
+    ctx.fillStyle='#f0e7cc';ctx.textAlign='center';ctx.fillText(r.hint.text,view.w/2,hintY+22);ctx.textAlign='left';
   }
 }
 function drawHUD(){
