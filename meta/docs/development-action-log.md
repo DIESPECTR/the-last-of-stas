@@ -1290,3 +1290,15 @@ Purpose: chronological source material for a future development scenario/video s
 - Tried to submit the 12 independent clips in parallel. Kling returned a mix of `Internal error`, `No cluster nodes available`, and insufficient balance errors (one 5-second pro clip requires 96 credits; balance fell below the requirement). No MP4 output was claimed or integrated.
 - Re-ran `railway whoami` using the supplied token. Railway returned `Unauthorized` again, so no project, deployment, or public URL can be created from this token.
 - Runtime remains intentionally safe: the Dog Handler uses the verified transparent four-direction static master until actual alpha sheets are generated and validated.
+
+### 69. Retried Railway authorization and Dog Handler Kling after replenishment — 2026-08-28
+- Confirmed the Kling-capable integration node is online.
+- Retried Dog Handler `idle_down` using the prepared Kling metadata after balance replenishment. Kling still returned `Internal error`; no source MP4 or sprite sheet was created.
+- Retried Railway CLI authentication with the supplied token. `railway whoami` still returns `Unauthorized`, so creating or deploying a Railway project is not possible with this credential.
+
+### 70. Switched Dog Handler generation to Wan 2.7; inspected sprite output — 2026-08-28
+- Following approval to leave Kling, switched all 12 Dog Handler animation metas to the reviewed Wan 2.7 i2v contract (`UTILITY: wan_api`, `MODE: i2v`, 720P, no watermark/prompt expansion).
+- Wan 2.7 produced 8 source MP4 clips: idle in four directions, walk down/right, and attack down/right. `walk_left`, `walk_up`, `attack_left`, and `attack_up` are still absent after the remaining generation calls hit balance/node failures.
+- Using the reviewed `gamedev_convert_video_to_sprite_sheet` template, processed all 8 successful sources through `video_background_removal` with BRIA, real alpha video, stable autocrop, 128×128 tiles, step 9, and 4 columns.
+- The processor produced each alpha WebM, but did not materialize any requested secondary `MAKE_SPRITE_SHEET_FILE` PNG. Direct file checks confirm 0/8 PNG sheets exist; this is a secondary-output failure, not a fake successful sprite result. The same metadata field/order matches prior working project conversion metas.
+- Retried the current Railway token with `railway whoami`; it also returns `Unauthorized`. No Railway resource was created.
