@@ -1,6 +1,6 @@
 ---
 SECTION_ID: plans.mobile-device-gate
-STATUS: in_progress
+STATUS: done
 TYPE: note
 ---
 

@@ -1,6 +1,6 @@
 ---
 SECTION_ID: plans.hater-raid-four-stages
-STATUS: in_progress
+STATUS: done
 TYPE: plan
 ---
 

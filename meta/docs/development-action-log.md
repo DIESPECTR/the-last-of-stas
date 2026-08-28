@@ -1360,3 +1360,12 @@ Purpose: chronological source material for a future development scenario/video s
 12. Verified mobile device gate implementation and desktop boot path; mobile devices receive the full-screen Stas laptop message before the game UI.
 13. Ran `node --check src/game.js`, `node --check src/hater-raid.js` and `git diff --check`; all passed.
 14. Searched production paths for `TEMP DEBUG:` markers and checked the clean browser console; none were found.
+
+## 2026-08-28 — Public release
+
+1. Committed the verified release as `a9624a5` and pushed `main` to `DIESPECTR/the-last-of-stas`.
+2. Changed GitHub repository visibility to public through the GitHub API; verified the repository while logged out and confirmed public commit `a9624a5`.
+3. Confirmed Railway redeployed the new runtime source: production `src/hater-raid.js` contains the four-stage raid, eight fence sections, player-driven hint fix and current balancing.
+4. Production smoke-test passed at 1920×1200: desktop boot was not blocked by the mobile gate, Hater Raid launched with KUOK selected, raid controls rendered, and KUOK idle/walk/attack sheets loaded as 512×512.
+5. Production console contained no `error`, `failed`, `404`, `TypeError`, `ReferenceError` or `warning` entries.
+6. Published links: game `https://the-last-of-stas-web-production.up.railway.app/`; source `https://github.com/DIESPECTR/the-last-of-stas`.
