@@ -146,7 +146,7 @@ const ZOMBIE_DRAW_SIZE={drifter:72,runner:64,spitter:82,glamour_drifter:72,offic
 const FRIEND_SUMMON_TYPES=['glamour_drifter','office_runner','heavy_spitter','silent_stalker','boss_zombie','bespectacled_teacher'];
 const BOSS_PHASES=[.75,.5,.25];
 const animationSheets=new Map();
-const ANIMATION_ASSET_REV='20260827-special-roster-v1';
+const ANIMATION_ASSET_REV='20260828-dog-handler-sheets-v1';
 function animationSheet(character,action,direction){const key=`${character}/${action}_${direction}`;let image=animationSheets.get(key);if(!image){image=new Image();image.src=`../assets/animations/sheets/${key}.png?v=${ANIMATION_ASSET_REV}`;animationSheets.set(key,image)}return image}
 function advanceAnimation(entity,action,dt){if(entity.animAction!==action){entity.animAction=action;entity.animTime=0}else entity.animTime=(entity.animTime||0)+dt;return action}
 function drawAnimatedSprite(target,character,action,direction,x,y,size,time,{tint=null,shadow=8,rim=null,rimAlpha=.45}={}){

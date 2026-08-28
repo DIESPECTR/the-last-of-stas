@@ -17,4 +17,4 @@ SPRITE_TILE_SIZE: 128x128
 SPRITE_FRAME_STEP: 9
 SPRITE_GRID_COLUMNS: 4
 PROMPT: Remove the plain background, preserve clean alpha edges around the handler and her single black-and-white dog, use one stable centered crop, then pack sampled frames into a transparent 4 by 4 128 pixel PNG sprite sheet.
-FILES: assets/zombies/new-batch-01/animation-api/dog_handler_idle_right.mp4
+VIDEO-INPUT: assets/zombies/new-batch-01/animation-api/dog_handler_idle_right.mp4

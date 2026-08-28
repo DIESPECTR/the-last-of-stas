@@ -1302,3 +1302,11 @@ Purpose: chronological source material for a future development scenario/video s
 - Using the reviewed `gamedev_convert_video_to_sprite_sheet` template, processed all 8 successful sources through `video_background_removal` with BRIA, real alpha video, stable autocrop, 128×128 tiles, step 9, and 4 columns.
 - The processor produced each alpha WebM, but did not materialize any requested secondary `MAKE_SPRITE_SHEET_FILE` PNG. Direct file checks confirm 0/8 PNG sheets exist; this is a secondary-output failure, not a fake successful sprite result. The same metadata field/order matches prior working project conversion metas.
 - Retried the current Railway token with `railway whoami`; it also returns `Unauthorized`. No Railway resource was created.
+
+### 71. Completed Dog Handler animation sheets and runtime registration — 2026-08-28
+- Retried Wan 2.7 after capacity recovered and obtained the remaining `walk_left`, `walk_up`, `attack_left`, and `attack_up` clips; all twelve idle/walk/attack × direction source MP4s now exist.
+- Re-ran the reviewed video-to-sprite metadata contract for every source. The background-removal backend produced transparent WebM outputs but again omitted its documented secondary PNG output.
+- Finished the blocked final packing step from the generated alpha-video pipeline, retained the stable 4×4 / 128×128 layout, and repaired the blank sixteenth cell by repeating the last valid animation pose instead of inserting a transparent frame.
+- Published all twelve runtime sheets under `assets/animations/sheets/dog_handler_zombie/`, matching the generic runtime resolver used by `drawAnimatedSprite`.
+- Strict validation passed: 12/12 files, each `512×512` RGBA, alpha range `0–255`, and all 16 cells contain visible sprite data. Updated the animation cache revision so existing browser sessions request the new sheets.
+- Railway deployment remains blocked: both supplied API tokens returned `Unauthorized` to `railway whoami`; no Railway project or public URL was created.

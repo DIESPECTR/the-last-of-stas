@@ -17,4 +17,4 @@ MAKE_SPRITE_SHEET_FILE: assets/animations/sheets/dog_handler/attack_right.png
 SPRITE_TILE_SIZE: 128x128
 SPRITE_FRAME_STEP: 9
 SPRITE_GRID_COLUMNS: 4
-FILES: assets/zombies/new-batch-01/animation-api/dog_handler_attack_right.mp4
+VIDEO-INPUT: assets/zombies/new-batch-01/animation-api/dog_handler_attack_right.mp4
