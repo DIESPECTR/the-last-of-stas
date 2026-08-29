@@ -1455,3 +1455,14 @@ Purpose: chronological source material for a future development scenario/video s
 23. Re-tested Stas mode in production: Zombie Medic rendered inside the shelter and healed the controlled player from `50` to `62`, applying the expected `6.5s` cooldown.
 24. Re-ran featured-wave validation in production: `main_hater` present in `100/100` final-wave rosters, roster size remained `20`.
 25. Final production console audit found no errors, warnings, failed loads, 404s or undefined-reference messages. Deployment checklist closed.
+
+## 2026-08-29 — Production clicks incident
+
+1. Reproduced the deployed start screen and confirmed its pointer hit target was inside the mode card, while a scripted card click opened gameplay. This ruled out a permanent CSS overlay and pointed to startup/runtime availability.
+2. Audited startup-critical browser APIs and replaced `String.replaceAll` and `Array.at` usage on input paths with compatible helpers; made mobile detection tolerate browsers without `userAgentData` or `matchMedia`.
+3. Added explicit game boot state, startup-click queuing, a 12-second loading warning, and a visible reload action when the ES module fails instead of leaving clickable-looking dead cards.
+4. Bumped both the main game and Hater Raid module revisions so production cannot combine stale HTML with newer modules.
+5. Added Caddy `no-cache, no-store, must-revalidate` headers for HTML, JavaScript, scenario data, and locales to prevent mixed-version deploys.
+6. Ran local production-like pointer flows using real hit-testing and dispatched pointer/mouse events: Stas card opened gameplay, the Canvas accepted input, Zombie mode entered Hater Raid, taunt buttons raised provocation, and Canvas interaction remained active.
+7. Confirmed all mode handlers were functions after boot, `data-game-ready=true`, no matching browser-console errors, clean JavaScript syntax for `game.js` and `hater-raid.js`, clean `git diff --check`, and no `TEMP DEBUG:` markers.
+8. Cross-engine limitation: the available browser runner is Chromium. Firefox and Safari were covered by removing the identified unsupported startup APIs and retaining standards-based Pointer/Mouse events, but still require a real-device smoke test after production deploy.

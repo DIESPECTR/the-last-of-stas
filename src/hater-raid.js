@@ -17,7 +17,8 @@ const RAID_HINTS=[
   'SPACE / ЛКМ — ЛОМАЙ КОЛОНКУ'
 ];
 function fenceSectionAt(fence,x){
-  return fence.sections?.find(section=>x>=section.left&&x<section.right)||fence.sections?.at(-1)||null;
+  const sections=fence.sections||[];
+  return sections.find(section=>x>=section.left&&x<section.right)||sections[sections.length-1]||null;
 }
 function syncFenceHealth(fence){
   fence.hp=fence.sections.reduce((sum,section)=>sum+section.hp,0);

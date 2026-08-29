@@ -8,7 +8,7 @@ import {drawCastShadows,drawInteriorLight,drawGrade,beginLightPass,endLightPass,
 import {createBlood,updateBlood,spurt,gush,splatterWall,dripTrail,drawBloodGround,drawBloodSplatter,drawBloodDrops} from './blood.js';
 import {createSpeakers,blareSpeakers,stopSpeakers,updateSpeakers,drawSpeakers,drawSpeakerWaves,speakerNear,speakerPosition} from './music.js';
 import {armTaunt,updateTaunts,drawTaunts,resetTaunts,TAUNT_LINES} from './taunts.js';
-import {RAID_ROSTER,RAID_TABS,RAID_STAGES,raidStatsFor,createHaterRaid,updateHaterRaid,attackRaidSpeaker,shoutRaidTaunt} from './hater-raid.js?v=medic-hater-1';
+import {RAID_ROSTER,RAID_TABS,RAID_STAGES,raidStatsFor,createHaterRaid,updateHaterRaid,attackRaidSpeaker,shoutRaidTaunt} from './hater-raid.js?v=click-hotfix-1';
 import {wantsReel,isReel,frameRect,applyCanvasSize,worldFromClient,beginReelFrame,setReel,setReelUrl} from './reel.js';
 const $=s=>document.querySelector(s),canvas=$('#game'),ctx=canvas.getContext('2d');
 // Gameplay lives in a 960×960 WORLD. Desktop crops the middle 960×600; reel shows the full height.
@@ -28,7 +28,8 @@ const speakers=createSpeakers(audio);
 const load=p=>fetch(p).then(r=>{if(!r.ok)throw new Error(`Failed to load ${p}`);return r.json()});
 const [componentData,weaponData,zombieData,scenario,i18n]=await Promise.all([load('../data/components/components.json'),load('../data/weapons/weapons.json'),load('../data/zombies/zombies.json'),load('../data/scenarios/first-night.json'),load('../locales/ru.json')]);
 const components=new Map(componentData.components.map(x=>[x.id,x])),weapons=new Map(weaponData.weapons.map(x=>[x.id,x])),zombieTypes=new Map(zombieData.zombies.map(x=>[x.id,x]));
-const t=(key,vars={})=>Object.entries(vars).reduce((s,[k,v])=>s.replaceAll(`{${k}}`,v),i18n[key]||key);
+const replaceEvery=(value,search,replacement)=>String(value).split(search).join(replacement);
+const t=(key,vars={})=>Object.entries(vars).reduce((s,[k,v])=>replaceEvery(s,`{${k}}`,v),i18n[key]||key);
 // Static markup hydration. index.html ships Russian literals so the page never flashes empty, but the
 // locale file is the single source of truth: anything carrying data-i18n is overwritten from it here.
 // A key missing from the JSON leaves the literal in place rather than printing the raw key name, which
@@ -40,8 +41,8 @@ const t=(key,vars={})=>Object.entries(vars).reduce((s,[k,v])=>s.replaceAll(`{${k
 // looks incomplete and one that looks broken.
 const weaponName=w=>i18n[`weapon_${w.id}`]||w.display_name;
 const weaponDesc=w=>i18n[`desc_${w.id}`]||w.description;
-const salvageName=key=>i18n[`salvage_${key}`]||key.replaceAll('_',' ');
-const roleName=role=>i18n[`role_${role}`]||role.replaceAll('_',' ');
+const salvageName=key=>i18n[`salvage_${key}`]||replaceEvery(key,'_',' ');
+const roleName=role=>i18n[`role_${role}`]||replaceEvery(role,'_',' ');
 const failureName=kind=>i18n[`failure_${kind}`]||kind.toUpperCase();
 function applyStaticStrings(){
   document.title=i18n.game_title||document.title;
@@ -1578,7 +1579,7 @@ addEventListener('keydown',e=>{
   rememberKey(e,true);
   if(MOVE_CODES.has(e.code)){e.preventDefault();return}
   if(haterRaid?.active){
-    if(e.code==='Digit1'||e.code==='Digit2'||e.code==='Digit3'){e.preventDefault();if(!e.repeat)useRaidTaunt(+e.code.at(-1)-1);return}
+    if(e.code==='Digit1'||e.code==='Digit2'||e.code==='Digit3'){e.preventDefault();if(!e.repeat)useRaidTaunt(+e.code.charAt(e.code.length-1)-1);return}
     if(e.code==='Space'){e.preventDefault();if(!e.repeat&&attackRaidSpeaker(haterRaid)){addShake(3,.16)}return}
     if(e.code==='Escape'){e.preventDefault();if(!e.repeat)exitHaterRaid();return}
   }

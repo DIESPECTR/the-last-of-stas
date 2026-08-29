@@ -10,9 +10,9 @@
   <link rel="icon" type="image/png" href="assets/ui/start/stas-mode.png?v=3">
   <script>
     (()=>{
-      const uaMobile=navigator.userAgentData?.mobile;
+      const uaMobile=navigator.userAgentData&&navigator.userAgentData.mobile;
       const legacyMobile=/Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      const compactTouch=matchMedia('(max-width: 820px) and (pointer: coarse)').matches;
+      const compactTouch=window.matchMedia&&matchMedia('(max-width: 820px) and (pointer: coarse)').matches;
       window.__MOBILE_DEVICE_GATE__=uaMobile===true||legacyMobile||compactTouch;
       document.documentElement.classList.toggle('mobile-device',window.__MOBILE_DEVICE_GATE__);
     })();
@@ -76,7 +76,34 @@
     <footer data-i18n="footer">Тихая подготовка. Короткое насилие. Считай, что осталось.</footer>
   </main>
   <script type="module">
-    if(!window.__MOBILE_DEVICE_GATE__)import('./src/game.js?v=medic-hater-4');
+    if(!window.__MOBILE_DEVICE_GATE__){
+      const root=document.documentElement,scene=document.querySelector('#game-scene'),copy=document.querySelector('#scene-copy');
+      let pendingMode=null;
+      root.dataset.gameReady='loading';
+      const queueEarlyMode=event=>{
+        if(root.dataset.gameReady!=='loading')return;
+        const button=event.target.closest('[data-scene-action="stas"],[data-scene-action="zombie"]');
+        if(!button)return;
+        event.preventDefault();event.stopImmediatePropagation();
+        pendingMode=button.dataset.sceneAction;
+        if(copy)copy.textContent='Загружаем игру… выбор уже запомнили.';
+      };
+      scene.addEventListener('click',queueEarlyMode,true);
+      const timeout=setTimeout(()=>{
+        if(root.dataset.gameReady==='loading'&&copy)copy.textContent='Игра загружается слишком долго. Обнови страницу.';
+      },12000);
+      import('./src/game.js?v=click-hotfix-1').then(()=>{
+        clearTimeout(timeout);root.dataset.gameReady='true';scene.removeEventListener('click',queueEarlyMode,true);
+        if(pendingMode)document.querySelector(`[data-scene-action="${pendingMode}"]`).click();
+      }).catch(error=>{
+        clearTimeout(timeout);console.error('Game boot failed',error);
+        root.dataset.gameReady='false';scene.removeEventListener('click',queueEarlyMode,true);
+        if(copy)copy.textContent='Игра не загрузилась. Нажми на любую карточку, чтобы обновить страницу.';
+        for(const button of document.querySelectorAll('[data-scene-action]')){
+          button.onclick=()=>location.replace(`${location.pathname}?reload=${Date.now()}`);
+        }
+      });
+    }
   </script>
 </body>
 </html>

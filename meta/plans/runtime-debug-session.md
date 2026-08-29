@@ -1,6 +1,6 @@
 ---
 SECTION_ID: plans.runtime-debug-session
-STATUS: done
+STATUS: in_progress
 TYPE: plan
 ---
 
@@ -14,3 +14,12 @@ TYPE: plan
 - [x] Re-run desktop regression and check browser console/assets
 - [x] Confirm no temporary debug markers remain
 - [x] Record every step and final evidence in the chronological action log
+
+## 2026-08-29 production click incident
+
+- [x] Reproduce the deployed start screen and inspect live click handlers
+- [x] Identify startup compatibility and stale-runtime cache risks
+- [x] Remove startup-critical unsupported APIs and bump the runtime revision
+- [x] Add a visible module boot failure path instead of silent dead controls
+- [x] Validate Stas mode, Hater Raid, pointer input and console in production-like browser runs
+- [ ] Deploy, verify response cache headers and record the incident in the chronological action log

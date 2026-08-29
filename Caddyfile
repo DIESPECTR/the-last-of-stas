@@ -1,6 +1,13 @@
 :{$PORT:8080} {
   root * /usr/share/caddy
   encode zstd gzip
+  # HTML, modules and game data must revalidate on every visit. Deploys often change DOM and JS
+  # together; caching one without the other leaves visible buttons with no matching handlers.
+  @runtime path / /index.html /src/* /data/* /locales/*
+  header @runtime Cache-Control "no-cache, no-store, must-revalidate"
+  header @runtime Pragma "no-cache"
+  header @runtime Expires "0"
+
   try_files {path} /index.html
   file_server
 }
