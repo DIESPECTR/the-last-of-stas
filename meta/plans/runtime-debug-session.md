@@ -1,6 +1,6 @@
 ---
 SECTION_ID: plans.runtime-debug-session
-STATUS: in_progress
+STATUS: done
 TYPE: plan
 ---
 
@@ -22,4 +22,4 @@ TYPE: plan
 - [x] Remove startup-critical unsupported APIs and bump the runtime revision
 - [x] Add a visible module boot failure path instead of silent dead controls
 - [x] Validate Stas mode, Hater Raid, pointer input and console in production-like browser runs
-- [ ] Deploy, verify response cache headers and record the incident in the chronological action log
+- [x] Deploy, verify response cache headers and record the incident in the chronological action log
