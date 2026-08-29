@@ -1441,3 +1441,11 @@ Purpose: chronological source material for a future development scenario/video s
 12. Checked desktop and 9:16 reel layouts: canvas remains within viewport bounds with no horizontal or vertical document overflow; medic/hater labels and raid HUD remain readable.
 13. Audited browser logs for errors, warnings, failed loads, 404s and undefined references: no matching entries.
 14. Added dev-only probes for medic healing/bounds, Main Hater aura state and repeated featured-wave roster validation; production behavior remains unaffected when `?dev` is absent.
+
+### Production verification follow-up
+
+15. Pushed integration commit `a4e1098` to `origin/main`; Railway auto-deploy completed and served the updated medic, Main Hater and featured final-wave data with HTTP 200.
+16. Production behavioral probe confirmed medic healing (player HP `50 → 62`) and `main_hater` inclusion in `100/100` generated final-wave rosters, each of size `20`.
+17. Production picker regression exposed a stale nested `hater-raid.js` browser cache: the deployed data was current, but the Main Hater card could be absent in an existing browser session.
+18. Fixed nested-module cache invalidation by versioning the `hater-raid.js` import and bumped the root `game.js` cache key.
+19. Re-tested locally: Main Hater card is present under `Новые зомби`; portrait loads at `1024×1536`; runtime syntax and diff validation pass.

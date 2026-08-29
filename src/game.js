@@ -8,7 +8,7 @@ import {drawCastShadows,drawInteriorLight,drawGrade,beginLightPass,endLightPass,
 import {createBlood,updateBlood,spurt,gush,splatterWall,dripTrail,drawBloodGround,drawBloodSplatter,drawBloodDrops} from './blood.js';
 import {createSpeakers,blareSpeakers,stopSpeakers,updateSpeakers,drawSpeakers,drawSpeakerWaves,speakerNear,speakerPosition} from './music.js';
 import {armTaunt,updateTaunts,drawTaunts,resetTaunts,TAUNT_LINES} from './taunts.js';
-import {RAID_ROSTER,RAID_TABS,RAID_STAGES,raidStatsFor,createHaterRaid,updateHaterRaid,attackRaidSpeaker,shoutRaidTaunt} from './hater-raid.js';
+import {RAID_ROSTER,RAID_TABS,RAID_STAGES,raidStatsFor,createHaterRaid,updateHaterRaid,attackRaidSpeaker,shoutRaidTaunt} from './hater-raid.js?v=medic-hater-1';
 import {wantsReel,isReel,frameRect,applyCanvasSize,worldFromClient,beginReelFrame,setReel,setReelUrl} from './reel.js';
 const $=s=>document.querySelector(s),canvas=$('#game'),ctx=canvas.getContext('2d');
 // Gameplay lives in a 960×960 WORLD. Desktop crops the middle 960×600; reel shows the full height.
