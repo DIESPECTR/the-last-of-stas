@@ -1,6 +1,6 @@
 ---
 SECTION_ID: plans.mommy-zombie
-STATUS: in_progress
+STATUS: done
 TYPE: plan
 ---
 
@@ -12,4 +12,4 @@ TYPE: plan
 - [x] Add Mommy Zombie to “New Zombies” and ordinary mixed waves
 - [x] Validate picker, spawn, alpha, scale and console in browser
 - [x] Record implementation in chronological action log
-- [ ] Deploy verified release
+- [x] Deploy verified release

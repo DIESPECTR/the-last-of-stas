@@ -1422,3 +1422,5 @@ Purpose: chronological source material for a future development scenario/video s
 9. Browser-tested playable Hater Raid: selection starts correctly, HUD reports `ЗОМБИ-МАМОЧКА`, and the paired mother-and-child sprite renders at readable scale with transparent background.
 10. Checked the edited files with `git diff --check`; no whitespace errors.
 11. Clean runtime module load completed. The only retained console item belonged to an earlier malformed automation probe at 19:41:01, not game code; no runtime asset 404 or module errors were produced by the clean load.
+12. Committed the verified integration as `d439804` (`Add playable Mommy Zombie`) and pushed it to public `main`.
+13. Confirmed the Railway production deployment serves the updated zombie data and both Mommy Zombie PNG assets; the production console contains no errors, warnings, failed requests, or 404s.
