@@ -1,6 +1,6 @@
 ---
 SECTION_ID: plans.medic-ally-main-hater
-STATUS: in_progress
+STATUS: completed
 TYPE: note
 ---
 
@@ -13,4 +13,4 @@ TYPE: note
 - [x] Add both characters to runtime rendering and encounter flow
 - [x] Browser-test healing, patrol bounds, boss aura, rendering and console
 - [x] Record every step in chronological action log
-- [ ] Deploy verified release
+- [x] Deploy verified release — commits `a4e1098` and cache-fix `3892f11` deployed through Railway; production picker, raid runtime, medic heal, featured final wave, assets and console verified.

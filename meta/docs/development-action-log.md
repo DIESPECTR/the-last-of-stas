@@ -1449,3 +1449,9 @@ Purpose: chronological source material for a future development scenario/video s
 17. Production picker regression exposed a stale nested `hater-raid.js` browser cache: the deployed data was current, but the Main Hater card could be absent in an existing browser session.
 18. Fixed nested-module cache invalidation by versioning the `hater-raid.js` import and bumped the root `game.js` cache key.
 19. Re-tested locally: Main Hater card is present under `Новые зомби`; portrait loads at `1024×1536`; runtime syntax and diff validation pass.
+20. Committed and pushed cache fix `3892f11`; Railway served the corrected release.
+21. Re-tested the production picker after image load: Main Hater card is present, portrait returns HTTP 200 (`image/png`) and renders at `1024×1536`.
+22. Started Hater Raid as Main Hater in production: mode active, selected type `main_hater`, HP `389`, six companion zombies spawned, and the character rendered without an opaque background.
+23. Re-tested Stas mode in production: Zombie Medic rendered inside the shelter and healed the controlled player from `50` to `62`, applying the expected `6.5s` cooldown.
+24. Re-ran featured-wave validation in production: `main_hater` present in `100/100` final-wave rosters, roster size remained `20`.
+25. Final production console audit found no errors, warnings, failed loads, 404s or undefined-reference messages. Deployment checklist closed.
