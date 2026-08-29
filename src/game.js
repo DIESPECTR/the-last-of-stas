@@ -97,6 +97,7 @@ const ZOMBIE_MASTERS={
   brunette_crowd_zombie:'../assets/zombies/new-batch-01/masters/brunette_crowd_zombie_4dir_master_alpha.png',
   cat_keeper:'../assets/zombies/new-batch-01/masters/cat_keeper_zombie_4dir_master_alpha.png',
   dog_handler_zombie:'../assets/zombies/new-batch-01/masters/dog_handler_zombie_4dir_master_alpha.png',
+  mommy_zombie:'../assets/zombies/new-batch-01/masters/mommy_zombie_4dir_master_alpha.png',
   vomiting_alexander:'../assets/zombies/new-batch-01/masters/vomiting_alexander_4dir_master_alpha.png',
   lilliput:'../assets/zombies/new-batch-01/masters/lilliput_zombie_4dir_master_alpha.png',
   lumberjack_zombie:'../assets/zombies/new-batch-01/masters/lumberjack_zombie_4dir_master_alpha.png',
@@ -136,13 +137,14 @@ const ANIM_SCALE={
   brunette_crowd_zombie:1.08,
   cat_keeper:1.08,
   dog_handler_zombie:1.18,
+  mommy_zombie:1.14,
   vomiting_alexander:1.12,
   lilliput:.72,
   lumberjack_zombie:1.18,
   big_russian_boss:1.08,
   injured_kuok:1.2
 };
-const ZOMBIE_DRAW_SIZE={drifter:72,runner:64,spitter:82,glamour_drifter:72,office_runner:64,heavy_spitter:82,silent_stalker:68,boss_zombie:86,bespectacled_teacher:74,communist_nikita:76,tattooed_crowd_zombie:76,blonde_crowd_zombie:76,plaid_glasses_zombie:76,brunette_crowd_zombie:76,cat_keeper:76,dog_handler_zombie:96,vomiting_alexander:84,lilliput:50,lumberjack_zombie:92,big_russian_boss:142,injured_kuok:138};
+const ZOMBIE_DRAW_SIZE={drifter:72,runner:64,spitter:82,glamour_drifter:72,office_runner:64,heavy_spitter:82,silent_stalker:68,boss_zombie:86,bespectacled_teacher:74,communist_nikita:76,tattooed_crowd_zombie:76,blonde_crowd_zombie:76,plaid_glasses_zombie:76,brunette_crowd_zombie:76,cat_keeper:76,dog_handler_zombie:96,mommy_zombie:90,vomiting_alexander:84,lilliput:50,lumberjack_zombie:92,big_russian_boss:142,injured_kuok:138};
 const FRIEND_SUMMON_TYPES=['glamour_drifter','office_runner','heavy_spitter','silent_stalker','boss_zombie','bespectacled_teacher'];
 const BOSS_PHASES=[.75,.5,.25];
 const animationSheets=new Map();
@@ -235,18 +237,18 @@ function crushBlacks(){
 let state,sessionId=0;
 let haterRaid=null,selectedRaidZombie='glamour_drifter',activeRaidTab='specials',raidTaunts=[];
 const RAID_NAMES={
-  communist_nikita:'КОММУНИСТ НИКИТА',tattooed_crowd_zombie:'ЗОМБИ С ТАТУ',blonde_crowd_zombie:'БЛОНДИНКА',plaid_glasses_zombie:'ОЧКИ И КЛЕТКА',brunette_crowd_zombie:'БРЮНЕТКА',cat_keeper:'ЗОМБИ С КОТОМ',dog_handler_zombie:'ЗОМБИ С СОБАКОЙ',vomiting_alexander:'БЛЮЮЩИЙ АЛЕКСАНДР',lilliput:'ЛИЛИПУТ',lumberjack_zombie:'ДРОВОСЕК',injured_kuok:'КУОК НА КОСТЫЛЯХ',
+  communist_nikita:'КОММУНИСТ НИКИТА',tattooed_crowd_zombie:'ЗОМБИ С ТАТУ',blonde_crowd_zombie:'БЛОНДИНКА',plaid_glasses_zombie:'ОЧКИ И КЛЕТКА',brunette_crowd_zombie:'БРЮНЕТКА',cat_keeper:'ЗОМБИ С КОТОМ',dog_handler_zombie:'ЗОМБИ С СОБАКОЙ',mommy_zombie:'ЗОМБИ-МАМОЧКА',vomiting_alexander:'БЛЮЮЩИЙ АЛЕКСАНДР',lilliput:'ЛИЛИПУТ',lumberjack_zombie:'ДРОВОСЕК',injured_kuok:'КУОК НА КОСТЫЛЯХ',
   glamour_drifter:'ГЛАМУРНАЯ',office_runner:'ОФИСНЫЙ',heavy_spitter:'ТЯЖЁЛАЯ',silent_stalker:'ТИХОНЯ',bespectacled_teacher:'ОЧКАСТАЯ УЧИЛКА',boss_zombie:'БРЮНЕТКА-БОСС'
 };
 const RAID_PORTRAITS={
   glamour_drifter:'assets/promos/zombie-portraits/glamour_drifter.png',office_runner:'assets/promos/zombie-portraits/office_runner.png',heavy_spitter:'assets/promos/zombie-portraits/heavy_spitter.png',silent_stalker:'assets/promos/zombie-portraits/silent_stalker.png',bespectacled_teacher:'assets/promos/zombie-portraits/bespectacled_teacher.png',boss_zombie:'assets/promos/zombie-portraits/brunette_boss.png',
-  communist_nikita:'assets/zombies/new-batch-01/communist_nikita.png',tattooed_crowd_zombie:'assets/zombies/new-batch-01/tattooed_crowd_zombie.png',blonde_crowd_zombie:'assets/zombies/new-batch-01/blonde_crowd_zombie.png',plaid_glasses_zombie:'assets/zombies/new-batch-01/plaid_glasses_zombie.png',brunette_crowd_zombie:'assets/zombies/new-batch-01/brunette_crowd_zombie.png',cat_keeper:'assets/zombies/new-batch-01/cat_keeper_zombie.png',dog_handler_zombie:'assets/zombies/new-batch-01/dog_handler_zombie.png',vomiting_alexander:'assets/zombies/new-batch-01/vomiting_alexander.png',lilliput:'assets/zombies/new-batch-01/lilliput_zombie.png',lumberjack_zombie:'assets/zombies/new-batch-01/lumberjack_zombie.png',injured_kuok:'assets/zombies/new-batch-01/injured_kuok.png'
+  communist_nikita:'assets/zombies/new-batch-01/communist_nikita.png',tattooed_crowd_zombie:'assets/zombies/new-batch-01/tattooed_crowd_zombie.png',blonde_crowd_zombie:'assets/zombies/new-batch-01/blonde_crowd_zombie.png',plaid_glasses_zombie:'assets/zombies/new-batch-01/plaid_glasses_zombie.png',brunette_crowd_zombie:'assets/zombies/new-batch-01/brunette_crowd_zombie.png',cat_keeper:'assets/zombies/new-batch-01/cat_keeper_zombie.png',dog_handler_zombie:'assets/zombies/new-batch-01/dog_handler_zombie.png',mommy_zombie:'assets/zombies/new-batch-01/mommy_zombie.png',vomiting_alexander:'assets/zombies/new-batch-01/vomiting_alexander.png',lilliput:'assets/zombies/new-batch-01/lilliput_zombie.png',lumberjack_zombie:'assets/zombies/new-batch-01/lumberjack_zombie.png',injured_kuok:'assets/zombies/new-batch-01/injured_kuok.png'
 };
 // Picker imagery is concept art, never runtime sprite sheets. A per-character fallback prevents a broken
 // request or stale cache from producing an empty black card while keeping the primary art full-body.
 const RAID_PORTRAIT_FALLBACKS={
   glamour_drifter:'assets/zombies/friends/glamour_drifter_initial.png',office_runner:'assets/zombies/friends/office_runner_initial.png',heavy_spitter:'assets/zombies/friends/heavy_spitter_initial.png',silent_stalker:'assets/zombies/friends/silent_stalker_initial.png',bespectacled_teacher:'assets/zombies/friends/bespectacled_teacher_initial.png',boss_zombie:'assets/zombies/friends/brunette_boss_initial.png',
-  communist_nikita:'assets/zombies/new-batch-01/masters/communist_nikita_4dir_master_alpha.png',tattooed_crowd_zombie:'assets/zombies/new-batch-01/masters/tattooed_crowd_zombie_4dir_master_alpha.png',blonde_crowd_zombie:'assets/zombies/new-batch-01/masters/blonde_crowd_zombie_4dir_master_alpha.png',plaid_glasses_zombie:'assets/zombies/new-batch-01/masters/plaid_glasses_zombie_4dir_master_alpha.png',brunette_crowd_zombie:'assets/zombies/new-batch-01/masters/brunette_crowd_zombie_4dir_master_alpha.png',cat_keeper:'assets/zombies/new-batch-01/masters/cat_keeper_zombie_4dir_master_alpha.png',dog_handler_zombie:'assets/zombies/new-batch-01/masters/dog_handler_zombie_4dir_master_alpha.png',vomiting_alexander:'assets/zombies/new-batch-01/masters/vomiting_alexander_4dir_master_alpha.png',lilliput:'assets/zombies/new-batch-01/masters/lilliput_zombie_4dir_master_alpha.png',lumberjack_zombie:'assets/zombies/new-batch-01/masters/lumberjack_zombie_4dir_master_alpha.png',injured_kuok:'assets/zombies/new-batch-01/masters/injured_kuok_4dir_master_alpha.png'
+  communist_nikita:'assets/zombies/new-batch-01/masters/communist_nikita_4dir_master_alpha.png',tattooed_crowd_zombie:'assets/zombies/new-batch-01/masters/tattooed_crowd_zombie_4dir_master_alpha.png',blonde_crowd_zombie:'assets/zombies/new-batch-01/masters/blonde_crowd_zombie_4dir_master_alpha.png',plaid_glasses_zombie:'assets/zombies/new-batch-01/masters/plaid_glasses_zombie_4dir_master_alpha.png',brunette_crowd_zombie:'assets/zombies/new-batch-01/masters/brunette_crowd_zombie_4dir_master_alpha.png',cat_keeper:'assets/zombies/new-batch-01/masters/cat_keeper_zombie_4dir_master_alpha.png',dog_handler_zombie:'assets/zombies/new-batch-01/masters/dog_handler_zombie_4dir_master_alpha.png',mommy_zombie:'assets/zombies/new-batch-01/masters/mommy_zombie_4dir_master_alpha.png',vomiting_alexander:'assets/zombies/new-batch-01/masters/vomiting_alexander_4dir_master_alpha.png',lilliput:'assets/zombies/new-batch-01/masters/lilliput_zombie_4dir_master_alpha.png',lumberjack_zombie:'assets/zombies/new-batch-01/masters/lumberjack_zombie_4dir_master_alpha.png',injured_kuok:'assets/zombies/new-batch-01/masters/injured_kuok_4dir_master_alpha.png'
 };
 const GAME_RESULTS={
   'stas-victory':{image:'assets/ui/endings/stas-victory.png',stamp:'РАССВЕТ',title:'ПЕСНЯ ДОИГРАЛА',copy:'Дом ещё стоит. Зомби закончились раньше, чем трек.',alt:'Стас победил зомби и сохранил колонку'},

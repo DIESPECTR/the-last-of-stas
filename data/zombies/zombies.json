@@ -178,6 +178,17 @@
       "drop": {"cloth": 1, "tendon": 1, "teeth": 1}
     },
     {
+      "id": "mommy_zombie",
+      "display_name": "Mommy Zombie",
+      "hp": 72,
+      "speed": 31,
+      "damage": 5,
+      "attack_interval": 2.0,
+      "radius": 14,
+      "color": "#9a4550",
+      "drop": {"cloth": 2, "rotten_tissue": 1}
+    },
+    {
       "id": "vomiting_alexander",
       "display_name": "Vomiting Alexander",
       "hp": 70,

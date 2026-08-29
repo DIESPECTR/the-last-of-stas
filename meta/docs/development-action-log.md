@@ -1408,3 +1408,17 @@ Purpose: chronological source material for a future development scenario/video s
 2. Updated the hydrated Russian locale value for `btn_hater_raid` to the same spelling.
 3. Confirmed the obsolete label no longer exists in runtime HTML, JavaScript, or locale JSON.
 4. Browser-checked both visible labels: both render `ИГРАТЬ ЗА ЗОНДБЕ`, horizontal overflow is zero, and the console is clean.
+
+## 2026-08-29 — Mommy Zombie fast integration
+
+1. Reviewed the uploaded mother-and-child reference and selected the reference-driven GPT Image character workflow.
+2. Generated `assets/zombies/new-batch-01/mommy_zombie.png` as the picker concept (1024×1536).
+3. Generated `assets/zombies/new-batch-01/masters/mommy_zombie_4dir_master_alpha.png` as the four-direction paired-unit runtime master (1024×1024).
+4. Validated the master alpha in-browser: 74.53% fully transparent pixels; no checkerboard baked into the image.
+5. Registered `mommy_zombie` data with 72 base HP, speed 31, damage 5 and 2.0 s attack interval.
+6. Added the label `ЗОМБИ-МАМОЧКА`, concept portrait, fallback master, draw size and runtime scale.
+7. Added Mommy Zombie to the `Новые зомби` Hater Raid tab and to mixed waves 2–5 of First Night.
+8. Browser-tested the picker: 12 New Zombies cards, portrait loaded at 1024×1536 without fallback.
+9. Browser-tested playable Hater Raid: selection starts correctly, HUD reports `ЗОМБИ-МАМОЧКА`, and the paired mother-and-child sprite renders at readable scale with transparent background.
+10. Checked the edited files with `git diff --check`; no whitespace errors.
+11. Clean runtime module load completed. The only retained console item belonged to an earlier malformed automation probe at 19:41:01, not game code; no runtime asset 404 or module errors were produced by the clean load.

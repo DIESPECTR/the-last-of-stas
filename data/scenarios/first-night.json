@@ -23,9 +23,9 @@
   },
   "waves":[
     {"at":0,"count":4,"types":["glamour_drifter","office_runner","communist_nikita","lilliput"]},
-    {"at":18,"count":8,"types":["glamour_drifter","office_runner","communist_nikita","tattooed_crowd_zombie","blonde_crowd_zombie","plaid_glasses_zombie","brunette_crowd_zombie","cat_keeper","vomiting_alexander","lilliput","lumberjack_zombie"]},
-    {"at":36,"count":12,"types":["glamour_drifter","office_runner","heavy_spitter","communist_nikita","tattooed_crowd_zombie","blonde_crowd_zombie","plaid_glasses_zombie","brunette_crowd_zombie","cat_keeper","vomiting_alexander","lilliput","lumberjack_zombie"]},
-    {"at":56,"count":16,"types":["glamour_drifter","office_runner","heavy_spitter","silent_stalker","communist_nikita","tattooed_crowd_zombie","blonde_crowd_zombie","plaid_glasses_zombie","brunette_crowd_zombie","cat_keeper","vomiting_alexander","lilliput","lumberjack_zombie"]},
-    {"at":74,"count":20,"types":["glamour_drifter","office_runner","heavy_spitter","silent_stalker","bespectacled_teacher","communist_nikita","tattooed_crowd_zombie","blonde_crowd_zombie","plaid_glasses_zombie","brunette_crowd_zombie","cat_keeper","vomiting_alexander","lilliput","lumberjack_zombie"]}
+    {"at":18,"count":8,"types":["glamour_drifter","office_runner","communist_nikita","tattooed_crowd_zombie","blonde_crowd_zombie","plaid_glasses_zombie","brunette_crowd_zombie","cat_keeper","mommy_zombie","vomiting_alexander","lilliput","lumberjack_zombie"]},
+    {"at":36,"count":12,"types":["glamour_drifter","office_runner","heavy_spitter","communist_nikita","tattooed_crowd_zombie","blonde_crowd_zombie","plaid_glasses_zombie","brunette_crowd_zombie","cat_keeper","mommy_zombie","vomiting_alexander","lilliput","lumberjack_zombie"]},
+    {"at":56,"count":16,"types":["glamour_drifter","office_runner","heavy_spitter","silent_stalker","communist_nikita","tattooed_crowd_zombie","blonde_crowd_zombie","plaid_glasses_zombie","brunette_crowd_zombie","cat_keeper","mommy_zombie","vomiting_alexander","lilliput","lumberjack_zombie"]},
+    {"at":74,"count":20,"types":["glamour_drifter","office_runner","heavy_spitter","silent_stalker","bespectacled_teacher","communist_nikita","tattooed_crowd_zombie","blonde_crowd_zombie","plaid_glasses_zombie","brunette_crowd_zombie","cat_keeper","mommy_zombie","vomiting_alexander","lilliput","lumberjack_zombie"]}
   ]
 }

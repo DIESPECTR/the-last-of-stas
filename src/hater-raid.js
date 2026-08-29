@@ -3,7 +3,7 @@
 // Hater Raid picker: the friends/new originals are intentionally separate from the first six special archetypes.
 // Every id remains playable; the compact second group stays the AI crowd so a raid does not turn into a 15-body rush.
 export const RAID_TABS={
-  originals:['communist_nikita','injured_kuok','tattooed_crowd_zombie','blonde_crowd_zombie','plaid_glasses_zombie','brunette_crowd_zombie','cat_keeper','dog_handler_zombie','vomiting_alexander','lilliput','lumberjack_zombie'],
+  originals:['communist_nikita','injured_kuok','tattooed_crowd_zombie','blonde_crowd_zombie','plaid_glasses_zombie','brunette_crowd_zombie','cat_keeper','dog_handler_zombie','mommy_zombie','vomiting_alexander','lilliput','lumberjack_zombie'],
   specials:['glamour_drifter','office_runner','heavy_spitter','silent_stalker','bespectacled_teacher','boss_zombie']
 };
 export const RAID_ROSTER=[...RAID_TABS.originals,...RAID_TABS.specials];
