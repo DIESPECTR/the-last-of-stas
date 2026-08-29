@@ -1397,3 +1397,7 @@ Purpose: chronological source material for a future development scenario/video s
 5. Confirmed the production browser console had no errors, warnings, failed loads, or 404s.
 6. Found one harmless empty `src` attribute on the hidden ending image during the final asset audit; removed it to prevent a redundant document request.
 7. Rechecked the fix locally: the image now has no `src`, the browser console is clean, and horizontal overflow remains zero.
+8. Committed the hidden-image microfix as `ccae602`, pushed `main`, and waited for Railway to redeploy.
+9. Verified production serves the new image markup without an empty `src`, retains the favicon, updated preparation HUD, and Hater Raid speaker HP-floor fix.
+10. Final production smoke check passed: 1920×1200 Canvas initialized, horizontal overflow is zero, no visible image failed, and the browser console contains no errors, warnings, failed requests, or 404s.
+11. Closed the final review and redeploy checklist. Public URL: `https://the-last-of-stas-web-production.up.railway.app/`.

@@ -22,8 +22,8 @@ TYPE: plan
 - [x] Re-run runtime debug regression for core mode and Hater Raid
 - [x] Fix passive Hater Raid victory and missing favicon request
 - [x] Validate the final local build in desktop and reel layouts
-- [ ] Commit and push the release to GitHub
-- [ ] Verify the Railway production deployment and record the public URL
+- [x] Commit and push the release to GitHub
+- [x] Verify the Railway production deployment and record the public URL
 
 ## Post-fullscreen display-mode regression
 - [x] Recheck normal desktop shell and quiet-yard gameplay
