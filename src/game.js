@@ -80,6 +80,12 @@ const NINJA_ALLY={speed:125,radius:10,damage:12,attackInterval:1.25,range:27,fol
 // contributes pressure, but cannot clear the horde without Stas.
 const SECOND_DEFENDER_ALLY={...NINJA_ALLY};
 const secondDefenderSprite=new Image();secondDefenderSprite.src='../assets/allies/second_defender_runtime.png?v=1';
+// The medic is a non-combat house support: he stays indoors and restores Stas only at close range.
+const MEDIC_ALLY={speed:78,healAmount:12,healInterval:6.5,healRange:105};
+const medicAllySprite=new Image();medicAllySprite.src='../assets/allies/zombie_medic_runtime.png?v=1';
+// Main Hater ships as a clean static cutout first; animation can be authored later without blocking gameplay.
+const mainHaterSprite=new Image();mainHaterSprite.src='../assets/zombies/new-batch-01/main_hater_runtime.png?v=1';
+const MAIN_HATER_AURA={range:150,speed:1.22,attackInterval:.78};
 const ZOMBIE_MASTERS={
   drifter:'../assets/zombies/drifter_sheet.png',
   runner:'../assets/zombies/runner_sheet.png',
@@ -144,7 +150,7 @@ const ANIM_SCALE={
   big_russian_boss:1.08,
   injured_kuok:1.2
 };
-const ZOMBIE_DRAW_SIZE={drifter:72,runner:64,spitter:82,glamour_drifter:72,office_runner:64,heavy_spitter:82,silent_stalker:68,boss_zombie:86,bespectacled_teacher:74,communist_nikita:76,tattooed_crowd_zombie:76,blonde_crowd_zombie:76,plaid_glasses_zombie:76,brunette_crowd_zombie:76,cat_keeper:76,dog_handler_zombie:96,mommy_zombie:90,vomiting_alexander:84,lilliput:50,lumberjack_zombie:92,big_russian_boss:142,injured_kuok:138};
+const ZOMBIE_DRAW_SIZE={drifter:72,runner:64,spitter:82,glamour_drifter:72,office_runner:64,heavy_spitter:82,silent_stalker:68,boss_zombie:86,bespectacled_teacher:74,communist_nikita:76,tattooed_crowd_zombie:76,blonde_crowd_zombie:76,plaid_glasses_zombie:76,brunette_crowd_zombie:76,cat_keeper:76,dog_handler_zombie:96,mommy_zombie:90,vomiting_alexander:84,lilliput:50,lumberjack_zombie:92,big_russian_boss:142,injured_kuok:138,main_hater:92};
 const FRIEND_SUMMON_TYPES=['glamour_drifter','office_runner','heavy_spitter','silent_stalker','boss_zombie','bespectacled_teacher'];
 const BOSS_PHASES=[.75,.5,.25];
 const animationSheets=new Map();
@@ -237,18 +243,18 @@ function crushBlacks(){
 let state,sessionId=0;
 let haterRaid=null,selectedRaidZombie='glamour_drifter',activeRaidTab='specials',raidTaunts=[];
 const RAID_NAMES={
-  communist_nikita:'КОММУНИСТ НИКИТА',tattooed_crowd_zombie:'ЗОМБИ С ТАТУ',blonde_crowd_zombie:'БЛОНДИНКА',plaid_glasses_zombie:'ОЧКИ И КЛЕТКА',brunette_crowd_zombie:'БРЮНЕТКА',cat_keeper:'ЗОМБИ С КОТОМ',dog_handler_zombie:'ЗОМБИ С СОБАКОЙ',mommy_zombie:'ЗОМБИ-МАМОЧКА',vomiting_alexander:'БЛЮЮЩИЙ АЛЕКСАНДР',lilliput:'ЛИЛИПУТ',lumberjack_zombie:'ДРОВОСЕК',injured_kuok:'КУОК НА КОСТЫЛЯХ',
+  communist_nikita:'КОММУНИСТ НИКИТА',tattooed_crowd_zombie:'ЗОМБИ С ТАТУ',blonde_crowd_zombie:'БЛОНДИНКА',plaid_glasses_zombie:'ОЧКИ И КЛЕТКА',brunette_crowd_zombie:'БРЮНЕТКА',cat_keeper:'ЗОМБИ С КОТОМ',dog_handler_zombie:'ЗОМБИ С СОБАКОЙ',mommy_zombie:'ЗОМБИ-МАМОЧКА',main_hater:'ГЛАВНЫЙ ХЕЙТЕР',vomiting_alexander:'БЛЮЮЩИЙ АЛЕКСАНДР',lilliput:'ЛИЛИПУТ',lumberjack_zombie:'ДРОВОСЕК',injured_kuok:'КУОК НА КОСТЫЛЯХ',
   glamour_drifter:'ГЛАМУРНАЯ',office_runner:'ОФИСНЫЙ',heavy_spitter:'ТЯЖЁЛАЯ',silent_stalker:'ТИХОНЯ',bespectacled_teacher:'ОЧКАСТАЯ УЧИЛКА',boss_zombie:'БРЮНЕТКА-БОСС'
 };
 const RAID_PORTRAITS={
   glamour_drifter:'assets/promos/zombie-portraits/glamour_drifter.png',office_runner:'assets/promos/zombie-portraits/office_runner.png',heavy_spitter:'assets/promos/zombie-portraits/heavy_spitter.png',silent_stalker:'assets/promos/zombie-portraits/silent_stalker.png',bespectacled_teacher:'assets/promos/zombie-portraits/bespectacled_teacher.png',boss_zombie:'assets/promos/zombie-portraits/brunette_boss.png',
-  communist_nikita:'assets/zombies/new-batch-01/communist_nikita.png',tattooed_crowd_zombie:'assets/zombies/new-batch-01/tattooed_crowd_zombie.png',blonde_crowd_zombie:'assets/zombies/new-batch-01/blonde_crowd_zombie.png',plaid_glasses_zombie:'assets/zombies/new-batch-01/plaid_glasses_zombie.png',brunette_crowd_zombie:'assets/zombies/new-batch-01/brunette_crowd_zombie.png',cat_keeper:'assets/zombies/new-batch-01/cat_keeper_zombie.png',dog_handler_zombie:'assets/zombies/new-batch-01/dog_handler_zombie.png',mommy_zombie:'assets/zombies/new-batch-01/mommy_zombie.png',vomiting_alexander:'assets/zombies/new-batch-01/vomiting_alexander.png',lilliput:'assets/zombies/new-batch-01/lilliput_zombie.png',lumberjack_zombie:'assets/zombies/new-batch-01/lumberjack_zombie.png',injured_kuok:'assets/zombies/new-batch-01/injured_kuok.png'
+  communist_nikita:'assets/zombies/new-batch-01/communist_nikita.png',tattooed_crowd_zombie:'assets/zombies/new-batch-01/tattooed_crowd_zombie.png',blonde_crowd_zombie:'assets/zombies/new-batch-01/blonde_crowd_zombie.png',plaid_glasses_zombie:'assets/zombies/new-batch-01/plaid_glasses_zombie.png',brunette_crowd_zombie:'assets/zombies/new-batch-01/brunette_crowd_zombie.png',cat_keeper:'assets/zombies/new-batch-01/cat_keeper_zombie.png',dog_handler_zombie:'assets/zombies/new-batch-01/dog_handler_zombie.png',mommy_zombie:'assets/zombies/new-batch-01/mommy_zombie.png',main_hater:'assets/zombies/new-batch-01/main_hater.png',vomiting_alexander:'assets/zombies/new-batch-01/vomiting_alexander.png',lilliput:'assets/zombies/new-batch-01/lilliput_zombie.png',lumberjack_zombie:'assets/zombies/new-batch-01/lumberjack_zombie.png',injured_kuok:'assets/zombies/new-batch-01/injured_kuok.png'
 };
 // Picker imagery is concept art, never runtime sprite sheets. A per-character fallback prevents a broken
 // request or stale cache from producing an empty black card while keeping the primary art full-body.
 const RAID_PORTRAIT_FALLBACKS={
   glamour_drifter:'assets/zombies/friends/glamour_drifter_initial.png',office_runner:'assets/zombies/friends/office_runner_initial.png',heavy_spitter:'assets/zombies/friends/heavy_spitter_initial.png',silent_stalker:'assets/zombies/friends/silent_stalker_initial.png',bespectacled_teacher:'assets/zombies/friends/bespectacled_teacher_initial.png',boss_zombie:'assets/zombies/friends/brunette_boss_initial.png',
-  communist_nikita:'assets/zombies/new-batch-01/masters/communist_nikita_4dir_master_alpha.png',tattooed_crowd_zombie:'assets/zombies/new-batch-01/masters/tattooed_crowd_zombie_4dir_master_alpha.png',blonde_crowd_zombie:'assets/zombies/new-batch-01/masters/blonde_crowd_zombie_4dir_master_alpha.png',plaid_glasses_zombie:'assets/zombies/new-batch-01/masters/plaid_glasses_zombie_4dir_master_alpha.png',brunette_crowd_zombie:'assets/zombies/new-batch-01/masters/brunette_crowd_zombie_4dir_master_alpha.png',cat_keeper:'assets/zombies/new-batch-01/masters/cat_keeper_zombie_4dir_master_alpha.png',dog_handler_zombie:'assets/zombies/new-batch-01/masters/dog_handler_zombie_4dir_master_alpha.png',mommy_zombie:'assets/zombies/new-batch-01/masters/mommy_zombie_4dir_master_alpha.png',vomiting_alexander:'assets/zombies/new-batch-01/masters/vomiting_alexander_4dir_master_alpha.png',lilliput:'assets/zombies/new-batch-01/masters/lilliput_zombie_4dir_master_alpha.png',lumberjack_zombie:'assets/zombies/new-batch-01/masters/lumberjack_zombie_4dir_master_alpha.png',injured_kuok:'assets/zombies/new-batch-01/masters/injured_kuok_4dir_master_alpha.png'
+  communist_nikita:'assets/zombies/new-batch-01/masters/communist_nikita_4dir_master_alpha.png',tattooed_crowd_zombie:'assets/zombies/new-batch-01/masters/tattooed_crowd_zombie_4dir_master_alpha.png',blonde_crowd_zombie:'assets/zombies/new-batch-01/masters/blonde_crowd_zombie_4dir_master_alpha.png',plaid_glasses_zombie:'assets/zombies/new-batch-01/masters/plaid_glasses_zombie_4dir_master_alpha.png',brunette_crowd_zombie:'assets/zombies/new-batch-01/masters/brunette_crowd_zombie_4dir_master_alpha.png',cat_keeper:'assets/zombies/new-batch-01/masters/cat_keeper_zombie_4dir_master_alpha.png',dog_handler_zombie:'assets/zombies/new-batch-01/masters/dog_handler_zombie_4dir_master_alpha.png',mommy_zombie:'assets/zombies/new-batch-01/masters/mommy_zombie_4dir_master_alpha.png',main_hater:'assets/zombies/new-batch-01/main_hater_runtime.png',vomiting_alexander:'assets/zombies/new-batch-01/masters/vomiting_alexander_4dir_master_alpha.png',lilliput:'assets/zombies/new-batch-01/masters/lilliput_zombie_4dir_master_alpha.png',lumberjack_zombie:'assets/zombies/new-batch-01/masters/lumberjack_zombie_4dir_master_alpha.png',injured_kuok:'assets/zombies/new-batch-01/masters/injured_kuok_4dir_master_alpha.png'
 };
 const GAME_RESULTS={
   'stas-victory':{image:'assets/ui/endings/stas-victory.png',stamp:'РАССВЕТ',title:'ПЕСНЯ ДОИГРАЛА',copy:'Дом ещё стоит. Зомби закончились раньше, чем трек.',alt:'Стас победил зомби и сохранил колонку'},
@@ -561,6 +567,8 @@ function reset(){
     player:{...scenario.player,heat:0,failed:false,failureKind:null,cooldown:0,weapon:scenario.starting_weapon},
     // Present immediately in level one: autonomous, friendly and never selectable as a hostile target.
     ninjaAlly:{x:scenario.player.x-42,y:scenario.player.y+22,followOffsetX:-38,followOffsetY:24,faceAngle:0,attack:0,attackTimer:0,hitFlash:0,animTime:0,kills:0},
+    // Friendly medic is present from level one but stays inside the house and heals only at close range.
+    medicAlly:{x:shelter.centerX+66,y:shelter.centerY+34,faceAngle:Math.PI,healTimer:2.5,healFlash:0,moving:false},
     // Joins only when the third wave is armed. Kept null before then so the early yard stays readable.
     secondDefender:null,
     shelter,
@@ -607,7 +615,7 @@ function spawn(typeId){
 // same wave composition without the wall-clock stagger, so it can flip this to an instant spawn.
 let instantSpawn=false;
 const ORDINARY_BOSS_IDS=new Set(['boss_zombie','big_russian_boss','injured_kuok']);
-const FRIEND_ZOMBIE_IDS=new Set(['communist_nikita','tattooed_crowd_zombie','blonde_crowd_zombie','plaid_glasses_zombie','brunette_crowd_zombie','cat_keeper','dog_handler_zombie','vomiting_alexander','lilliput','lumberjack_zombie']);
+const FRIEND_ZOMBIE_IDS=new Set(['communist_nikita','tattooed_crowd_zombie','blonde_crowd_zombie','plaid_glasses_zombie','brunette_crowd_zombie','cat_keeper','dog_handler_zombie','vomiting_alexander','lilliput','lumberjack_zombie','main_hater']);
 function shuffle(items){const result=[...items];for(let i=result.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[result[i],result[j]]=[result[j],result[i]]}return result}
 function buildWaveRoster(w){
   // Bosses are encounter-only. Friend identities are unique within a wave; generic archetypes fill any overflow.
@@ -615,7 +623,13 @@ function buildWaveRoster(w){
   const recent=new Set(state.recentWaveTypes||[]);
   const bag=shuffle((allowed.filter(id=>!recent.has(id)).length?allowed.filter(id=>!recent.has(id)):allowed));
   const roster=[],usedFriends=new Set();
-  for(const id of bag){if(roster.length>=w.count)break;if(!FRIEND_ZOMBIE_IDS.has(id)||!usedFriends.has(id)){roster.push(id);if(FRIEND_ZOMBIE_IDS.has(id))usedFriends.add(id)}}
+  // A featured encounter identity is guaranteed rather than left to the shuffled subset.
+  // This keeps the Main Hater a real final-wave mini-boss even when the roster has more IDs than slots.
+  if(w.featured_type&&allowed.includes(w.featured_type)){
+    roster.push(w.featured_type);
+    if(FRIEND_ZOMBIE_IDS.has(w.featured_type))usedFriends.add(w.featured_type);
+  }
+  for(const id of bag){if(roster.length>=w.count)break;if(id!==w.featured_type&&(!FRIEND_ZOMBIE_IDS.has(id)||!usedFriends.has(id))){roster.push(id);if(FRIEND_ZOMBIE_IDS.has(id))usedFriends.add(id)}}
   const generic=allowed.filter(id=>!FRIEND_ZOMBIE_IDS.has(id));
   const fallback=generic.length?generic:allowed;
   while(roster.length<w.count)roster.push(fallback[Math.floor(Math.random()*fallback.length)]);
@@ -774,7 +788,45 @@ function updateNinjaAlly(dt){
   spurt(state.blood,target.x,target.y,ally.faceAngle,Math.min(1.45,appliedDamage/18));sfx('impact');addShake(chorus?2.6:1.5,.13);
   if(wasAlive&&target.hp<=0){ally.kills++;ally.waveKills++}
 }
+function updateMedicAlly(dt){
+  const medic=state.medicAlly;if(!medic)return;
+  const shelter=state.shelter,p=state.player,padding=30;
+  medic.healTimer=Math.max(0,medic.healTimer-dt);medic.healFlash=Math.max(0,medic.healFlash-dt);
+  // Follow Stas only while he is inside; otherwise hold a readable support position near the speaker.
+  const targetX=p.inside?Math.max(shelter.x+padding,Math.min(shelter.x+shelter.width-padding,p.x+48)):shelter.centerX+66;
+  const targetY=p.inside?Math.max(shelter.y+padding,Math.min(shelter.y+shelter.height-padding,p.y+26)):shelter.centerY+34;
+  const dx=targetX-medic.x,dy=targetY-medic.y,distance=Math.hypot(dx,dy)||1;
+  medic.moving=distance>10;
+  if(medic.moving){medic.x+=dx/distance*MEDIC_ALLY.speed*dt;medic.y+=dy/distance*MEDIC_ALLY.speed*dt;medic.faceAngle=Math.atan2(dy,dx)}
+  medic.x=Math.max(shelter.x+padding,Math.min(shelter.x+shelter.width-padding,medic.x));
+  medic.y=Math.max(shelter.y+padding,Math.min(shelter.y+shelter.height-padding,medic.y));
+  const maxHp=scenario.player.hp||100;
+  if(medic.healTimer<=0&&p.inside&&p.hp<maxHp&&Math.hypot(p.x-medic.x,p.y-medic.y)<=MEDIC_ALLY.healRange){
+    const healed=Math.min(MEDIC_ALLY.healAmount,maxHp-p.hp);p.hp+=healed;medic.healTimer=MEDIC_ALLY.healInterval;medic.healFlash=.85;
+    sfx('ui');alertStatus(`ЗОМБЕ-МЕДИК · +${Math.ceil(healed)} HP`);
+  }
+}
 if(DEV_MODE){
+  window.__medicHaterDebug=()=>({
+    medic:state?.medicAlly?{...state.medicAlly,playerHp:state.player.hp,playerInside:state.player.inside,shelter:{x:state.shelter.x,y:state.shelter.y,width:state.shelter.width,height:state.shelter.height}}:null,
+    haters:state?.zombies.filter(z=>z.id==='main_hater').map(z=>({x:z.x,y:z.y,hp:z.hp,attack:z.attack,animAction:z.animAction}))||[],
+    assets:{medic:{complete:medicAllySprite.complete,width:medicAllySprite.naturalWidth},hater:{complete:mainHaterSprite.complete,width:mainHaterSprite.naturalWidth}}
+  });
+  window.__medicHealProbe=()=>{if(!state?.medicAlly)return null;state.player.x=state.medicAlly.x-20;state.player.y=state.medicAlly.y;state.player.inside=true;state.player.hp=50;state.medicAlly.healTimer=0;updateMedicAlly(.016);return window.__medicHaterDebug()};
+  window.__mainHaterAuraProbe=()=>{
+    state.zombies.length=0;state.phase='wave';
+    spawn('main_hater');const hater=state.zombies.at(-1);hater.x=480;hater.y=120;hater.probeRole='hater';
+    spawn('office_runner');const near=state.zombies.at(-1);near.x=520;near.y=120;near.probeRole='near';
+    spawn('office_runner');const far=state.zombies.at(-1);far.x=820;far.y=120;far.probeRole='far';
+    return {tuning:{...MAIN_HATER_AURA},entities:state.zombies.map(z=>({role:z.probeRole,id:z.id,x:z.x,y:z.y,speed:z.speed,attackInterval:z.attack_interval}))};
+  };
+  window.__mainHaterAuraState=()=>({tuning:{...MAIN_HATER_AURA},entities:state?.zombies.filter(z=>z.probeRole).map(z=>({role:z.probeRole,id:z.id,x:z.x,y:z.y,hp:z.hp,attack:z.attack,animAction:z.animAction}))||[]});
+  window.__finalWaveRosterProbe=(runs=20)=>{
+    const wave=scenario.waves.at(-1),previous=[...(state.recentWaveTypes||[])];
+    const rosters=Array.from({length:runs},()=>buildWaveRoster(wave));
+    state.recentWaveTypes=previous;
+    return {runs,featured:wave.featured_type,allContainFeatured:rosters.every(roster=>roster.includes(wave.featured_type)),sizes:[...new Set(rosters.map(roster=>roster.length))],rosters};
+  };
   window.__zombieAnimationDebug=()=>state?.zombies.map(z=>({id:z.id,x:z.x,y:z.y,hp:z.hp,animAction:z.animAction,animTime:z.animTime||0,attack:z.attack||0}));
   window.__spawnZombieAnimationProbe=(id='brunette_crowd_zombie',distance='near')=>{
     state.phase='wave';
@@ -840,6 +892,7 @@ function update(dt){
   state.activeAlly=state.ninjaAlly;updateNinjaAlly(dt);
   if(state.secondDefender){state.activeAlly=state.secondDefender;updateNinjaAlly(dt)}
   state.activeAlly=null;
+  updateMedicAlly(dt);
   if(state.phase==='idle'||state.phase==='break'){
     updateDestructibles(state.destructibles,dt);
     for(const effect of state.effects)effect.life-=dt;
@@ -886,7 +939,9 @@ function update(dt){
   const turretShots=updateTurrets(state.interaction.turrets,dt,state.zombies,(x,y)=>isInsideShelter(state.shelter,x,y),noise);
   if(turretShots.length){for(const shot of turretShots)state.shots.push(shot);sfx('shot')}
   for(const shot of state.shots){shot.x+=shot.vx*dt;shot.y+=shot.vy*dt;shot.life-=dt}
+  const liveMainHaters=state.zombies.filter(zombie=>zombie.id==='main_hater'&&zombie.hp>0);
   for(const zombie of state.zombies){
+    const haterAura=zombie.id!=='main_hater'&&liveMainHaters.some(hater=>Math.hypot(hater.x-zombie.x,hater.y-zombie.y)<=MAIN_HATER_AURA.range);
     // The horde walks to the nearest point of the actual outer wall, so bodies spread along the facade
     // they arrived at instead of collapsing onto one radius.
     const wall=nearestWallPoint(state.shelter,zombie.x,zombie.y);
@@ -895,7 +950,8 @@ function update(dt){
     if(heard)target=heard;
     const angle=Math.atan2(target.y-zombie.y,target.x-zombie.x);
     const reach=zombie.radius+4,atShelter=wall.distance<=reach;
-    if(!atShelter||heard){zombie.x+=Math.cos(angle)*zombie.speed*dt;zombie.y+=Math.sin(angle)*zombie.speed*dt}
+    const auraSpeed=haterAura?MAIN_HATER_AURA.speed:1;
+    if(!atShelter||heard){zombie.x+=Math.cos(angle)*zombie.speed*auraSpeed*dt;zombie.y+=Math.sin(angle)*zombie.speed*auraSpeed*dt}
     // Bodies cannot walk through the walls either: they mass at the facade and in the doorway
     collideShelter(state.shelter,zombie,zombie.radius*.7);
     zombie.attack-=dt;zombie.hitFlash=Math.max(0,(zombie.hitFlash||0)-dt);zombie.faceAngle=angle;
@@ -914,14 +970,14 @@ function update(dt){
     // shooting them is what makes turret placement a decision: put it in the open and it gets eaten.
     const machine=turretNear(state.interaction.turrets,zombie.x,zombie.y,zombie.radius+6);
     if(machine&&!machine.destroyed&&zombie.attack<=0){
-      zombie.attack=zombie.attack_interval||1.6;
+      zombie.attack=(zombie.attack_interval||1.6)*(haterAura?MAIN_HATER_AURA.attackInterval:1);
       if(damageTurret(machine,zombie.damage)){alertStatus(t('turret_wrecked',{name:turretStats(machine).name}));sfx('death')}
     }
     // Standing props are also chewed through: cover that never breaks would let the player park behind
     // the car all night. A prop that is already rubble is skipped by `propAt`, so it stops being a wall.
     const obstacle=propAt(state.destructibles,zombie.x,zombie.y,zombie.radius*.6);
     if(obstacle&&zombie.attack<=0){
-      zombie.attack=zombie.attack_interval||1.6;
+      zombie.attack=(zombie.attack_interval||1.6)*(haterAura?MAIN_HATER_AURA.attackInterval:1);
       const broke=damageProp(state.destructibles,obstacle,zombie.damage);
       if(broke)resolvePropBreak(broke);
     }
@@ -930,7 +986,7 @@ function update(dt){
     // house in twenty seconds: seven Drifters were dealing 49 damage per second to a 500 point building.
     if(atShelter&&zombie.attack<=0){
       const hit=damageShelter(state.shelter,wall,zombie.damage,{reinforced:state.defenses.reinforced});
-      zombie.attack=zombie.attack_interval||1.6;
+      zombie.attack=(zombie.attack_interval||1.6)*(haterAura?MAIN_HATER_AURA.attackInterval:1);
       sfx('house_hit');
       if(Math.random()<.35)sfx('growl');
       if(hit.splintered)alertStatus(t('plank_tore_off'));
@@ -1106,6 +1162,22 @@ function drawSecondDefender(){
   ctx.restore();
   ctx.save();ctx.textAlign='center';ctx.font='bold 9px "Chivo Mono",monospace';ctx.fillStyle='#9fe8f1';ctx.fillText('СОЮЗНИК · ПОДДЕРЖКА',ally.x,ally.y+size*.56);ctx.restore();
 }
+function drawRuntimeCutout(image,x,y,width,{flip=false,tint=null,shadow=7}={}){
+  if(!image.complete||!image.naturalWidth)return false;
+  const height=width*(image.naturalHeight/image.naturalWidth);
+  ctx.save();ctx.translate(x,y);if(flip)ctx.scale(-1,1);
+  ctx.shadowColor='#000c';ctx.shadowBlur=shadow;ctx.drawImage(image,-width/2,-height+10,width,height);ctx.shadowBlur=0;
+  if(tint){ctx.globalCompositeOperation='source-atop';ctx.fillStyle=tint;ctx.fillRect(-width/2,-height+10,width,height)}
+  ctx.restore();return true;
+}
+function drawMedicAlly(){
+  const medic=state.medicAlly;if(!medic||haterRaid?.active)return;
+  const pulse=medic.healFlash>0?medic.healFlash/.85:0;
+  ctx.save();ctx.globalAlpha=.24+pulse*.25;ctx.fillStyle=pulse?'#8fffb5':'#78c99a';ctx.beginPath();ctx.ellipse(medic.x,medic.y+5,23+pulse*13,9+pulse*5,0,0,Math.PI*2);ctx.fill();ctx.restore();
+  drawRuntimeCutout(medicAllySprite,medic.x,medic.y,70,{flip:Math.cos(medic.faceAngle||0)<0,shadow:5});
+  if(pulse){ctx.save();ctx.globalAlpha=pulse;ctx.strokeStyle='#b8ffd0';ctx.lineWidth=3;ctx.beginPath();ctx.arc(medic.x,medic.y-32,17+(1-pulse)*18,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#d8ffe2';ctx.fillRect(medic.x-3,medic.y-44,6,24);ctx.fillRect(medic.x-12,medic.y-35,24,6);ctx.restore()}
+  ctx.save();ctx.textAlign='center';ctx.font='bold 9px "Chivo Mono",monospace';ctx.fillStyle='#9fe8bc';ctx.fillText('СОЮЗНИК · МЕДИК',medic.x,medic.y+18);ctx.restore();
+}
 function reelFocus(){
   if(!state)return {x:WORLD.width/2,y:WORLD.height/2};
   const s=state.shelter,p=state.player;
@@ -1179,7 +1251,9 @@ function draw(){
     const moveAngle=z.faceAngle??Math.atan2(state.shelter.centerY-z.y,state.shelter.centerX-z.x);
     const direction=directionCell(moveAngle),size=ZOMBIE_DRAW_SIZE[z.id]||72,renderSize=size*(ANIM_SCALE[z.id]||1);
     const tint=z.hitFlash>0?'#e7d8bbaa':null,rim=z.hitFlash>0?'#f3e6c4':null;
-    const animated=drawAnimatedSprite(ctx,z.id,z.animAction||'walk',direction,z.x,z.y,renderSize,z.animTime,{tint,shadow:9,rim,rimAlpha:z.hitFlash>0?.85:rimNight});
+    if(z.id==='main_hater'){const pulse=.5+.5*Math.sin(performance.now()*.007);ctx.save();ctx.globalAlpha=.13+pulse*.07;ctx.strokeStyle='#e34232';ctx.lineWidth=3;ctx.beginPath();ctx.arc(z.x,z.y,MAIN_HATER_AURA.range,0,Math.PI*2);ctx.stroke();ctx.restore()}
+    const staticHater=z.id==='main_hater'&&drawRuntimeCutout(mainHaterSprite,z.x,z.y,92,{flip:direction===2,tint,shadow:9});
+    const animated=staticHater||drawAnimatedSprite(ctx,z.id,z.animAction||'walk',direction,z.x,z.y,renderSize,z.animTime,{tint,shadow:9,rim,rimAlpha:z.hitFlash>0?.85:rimNight});
     // These two four-pose masters contain a dark baked matte. Never flash that rectangle while a real 4×4 sheet is loading.
     const skipMasterFallback=z.id==='vomiting_alexander'||z.id==='lumberjack_zombie';
     const rendered=animated||(!skipMasterFallback&&drawDirectionSprite(ctx,zombieSheets.get(z.id),direction,z.x,z.y,size,{tint,shadow:9,rim,rimAlpha:z.hitFlash>0?.85:rimNight}));
@@ -1196,8 +1270,10 @@ function draw(){
       const selected=rz===haterRaid.player,direction=directionCell(rz.faceAngle),base=ZOMBIE_DRAW_SIZE[rz.id]||72;
       // KUOK is boss-sized only in Stas defence. In Hater Raid he is a normal playable body.
       const size=rz.id==='injured_kuok'?78:base*(ANIM_SCALE[rz.id]||1);
-      drawAnimatedSprite(ctx,rz.id,rz.animAction||'idle',direction,rz.x,rz.y,size,rz.animTime,{tint:rz.hitFlash>0?'#e7d8bbaa':null,shadow:selected?10:8,rim:selected?'#b5d8a0':null,rimAlpha:selected?.42:0})
-        ||drawDirectionSprite(ctx,zombieSheets.get(rz.id),direction,rz.x,rz.y,base,{tint:rz.hitFlash>0?'#e7d8bbaa':null,shadow:selected?10:8,rim:selected?'#b5d8a0':null,rimAlpha:selected?.42:0});
+      const raidTint=rz.hitFlash>0?'#e7d8bbaa':null;
+      const raidStatic=rz.id==='main_hater'&&drawRuntimeCutout(mainHaterSprite,rz.x,rz.y,size,{flip:direction===2,tint:raidTint,shadow:selected?10:8});
+      raidStatic||drawAnimatedSprite(ctx,rz.id,rz.animAction||'idle',direction,rz.x,rz.y,size,rz.animTime,{tint:raidTint,shadow:selected?10:8,rim:selected?'#b5d8a0':null,rimAlpha:selected?.42:0})
+        ||drawDirectionSprite(ctx,zombieSheets.get(rz.id),direction,rz.x,rz.y,base,{tint:raidTint,shadow:selected?10:8,rim:selected?'#b5d8a0':null,rimAlpha:selected?.42:0});
       const hp=Math.max(0,rz.hp/rz.maxHp),barWidth=selected?68:42,barHeight=selected?5:3;
       ctx.fillStyle='#111';ctx.fillRect(rz.x-barWidth/2,rz.y-size*.66,barWidth,barHeight);ctx.fillStyle=selected?'#b44737':'#7f8655';ctx.fillRect(rz.x-barWidth/2,rz.y-size*.66,barWidth*hp,barHeight);
     }
@@ -1213,6 +1289,7 @@ function draw(){
   if(playerDirection===1)drawEquippedWeapon();
   drawNinjaAlly();
   drawSecondDefender();
+  drawMedicAlly();
   const playerRendered=drawAnimatedSprite(ctx,PLAYER_CHARACTER,p.animAction||'idle',playerDirection,p.x,p.y,108,p.animTime,{tint:playerTint,shadow:11})||drawDirectionSprite(ctx,survivorSheet,playerDirection,p.x,p.y,164,{tint:playerTint,shadow:11});
   if(!playerRendered){ctx.save();ctx.translate(p.x,p.y);ctx.rotate(a);ctx.fillStyle=p.failed?'#9f3f2d':'#bdb6a0';ctx.beginPath();ctx.moveTo(12,0);ctx.lineTo(-7,-8);ctx.lineTo(-5,8);ctx.closePath();ctx.fill();ctx.restore()}
   if(playerDirection!==1)drawEquippedWeapon();

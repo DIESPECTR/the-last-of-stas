@@ -1424,3 +1424,20 @@ Purpose: chronological source material for a future development scenario/video s
 11. Clean runtime module load completed. The only retained console item belonged to an earlier malformed automation probe at 19:41:01, not game code; no runtime asset 404 or module errors were produced by the clean load.
 12. Committed the verified integration as `d439804` (`Add playable Mommy Zombie`) and pushed it to public `main`.
 13. Confirmed the Railway production deployment serves the updated zombie data and both Mommy Zombie PNG assets; the production console contains no errors, warnings, failed requests, or 404s.
+
+## 2026-08-29 — Zombie Medic ally + Main Hater mini-boss runtime integration
+
+1. Reviewed the existing medic/hater plan, runtime data, scenario roster, Hater Raid roster, rendering paths and generated transparent assets.
+2. Confirmed `zombie_medic_runtime.png` and `main_hater_runtime.png` decode successfully at 1024 px width and render through dedicated runtime-cutout paths.
+3. Verified the Zombie Medic initializes inside the shelter, remains clamped to the interior bounds and does not participate in map-wide combat.
+4. Ran the deterministic healing probe: Stas was reduced to 50 HP, the medic restored 12 HP to 62, set the 6.5 s cooldown and triggered the heal flash.
+5. Verified the Main Hater runtime entity uses 190 HP, 25 movement speed, 10 damage, 2.15 s base attack interval and a dedicated 92 px draw size.
+6. Verified the hostile aura configuration: 150 world-unit radius, 1.22 movement multiplier and 0.78 attack-interval multiplier for nearby non-boss zombies.
+7. Confirmed the Main Hater static cutout, red aura ring, health bar and ordinary horde interaction render correctly in the live canvas.
+8. Added `featured_type` support to wave construction so encounter identities are guaranteed rather than randomly omitted by the shuffle-bag subset.
+9. Marked `main_hater` as the featured type of wave 5 and ran 50 shuffled final-wave roster builds: all 50 contained exactly one Main Hater and retained the configured 20-entity wave size.
+10. Confirmed the Main Hater appears in the **Новые зомби** picker with the generated 1024×1536 concept portrait; all portraits in the tab decoded successfully.
+11. Launched Hater Raid as Main Hater and verified active state, 389 raid HP, six AI companions, runtime rendering, movement, fence-stage interaction and HUD identity.
+12. Checked desktop and 9:16 reel layouts: canvas remains within viewport bounds with no horizontal or vertical document overflow; medic/hater labels and raid HUD remain readable.
+13. Audited browser logs for errors, warnings, failed loads, 404s and undefined references: no matching entries.
+14. Added dev-only probes for medic healing/bounds, Main Hater aura state and repeated featured-wave roster validation; production behavior remains unaffected when `?dev` is absent.

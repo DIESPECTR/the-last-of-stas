@@ -231,6 +231,17 @@
       "radius": 19,
       "color": "#8a5a4d",
       "drop": {"metal_scrap": 3, "battery": 1, "teeth": 2}
+    },
+    {
+      "id": "main_hater",
+      "display_name": "Главный хейтер",
+      "hp": 190,
+      "speed": 25,
+      "damage": 10,
+      "attack_interval": 2.15,
+      "radius": 17,
+      "color": "#b1332b",
+      "drop": {"metal_scrap": 2, "battery": 2, "teeth": 2}
     }
   ]
 }
