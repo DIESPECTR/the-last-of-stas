@@ -1401,3 +1401,10 @@ Purpose: chronological source material for a future development scenario/video s
 9. Verified production serves the new image markup without an empty `src`, retains the favicon, updated preparation HUD, and Hater Raid speaker HP-floor fix.
 10. Final production smoke check passed: 1920×1200 Canvas initialized, horizontal overflow is zero, no visible image failed, and the browser console contains no errors, warnings, failed requests, or 404s.
 11. Closed the final review and redeploy checklist. Public URL: `https://the-last-of-stas-web-production.up.railway.app/`.
+
+## 2026-08-29 — Zombie mode label correction
+
+1. Replaced the pre-hydration header and mode-card label `ИГРАТЬ ЗА ЗОНБЕ` with `ИГРАТЬ ЗА ЗОНДБЕ`.
+2. Updated the hydrated Russian locale value for `btn_hater_raid` to the same spelling.
+3. Confirmed the obsolete label no longer exists in runtime HTML, JavaScript, or locale JSON.
+4. Browser-checked both visible labels: both render `ИГРАТЬ ЗА ЗОНДБЕ`, horizontal overflow is zero, and the console is clean.
