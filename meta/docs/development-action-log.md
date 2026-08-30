@@ -1470,3 +1470,19 @@ Purpose: chronological source material for a future development scenario/video s
 10. Verified live response headers for `/`, `/index.html`, and `/src/game.js`: each returned `Cache-Control: no-cache, no-store, must-revalidate` and `Pragma: no-cache`.
 11. Re-ran production pointer flows: the Stas card opened gameplay and exposed an interactive Canvas; the Zombie card opened the picker, a zombie card and `НАЧАТЬ РЕЙД` started Hater Raid, a taunt raised provocation, and an exposed Canvas point accepted the raid attack click.
 12. Final production console audit returned no entries. The click incident is closed in the available Chromium production runner.
+
+
+## 2026-08-30 — Captain-inspired Zombie integration
+
+1. Reviewed the supplied portrait and the project’s existing character-generation and zombie-runtime patterns.
+2. Generated `assets/zombies/new-batch-02/concepts/captain_zombie.png`: a non-graphic, shield-bearing patriotic zombie concept preserving the supplied character identity.
+3. Attempted the GPT-image four-direction master three times. The service moderation rejected both the concept-driven and neutral source-photo variants; no failed output was treated as complete.
+4. Used the documented procedural fallback: isolated the approved concept from its background, cleaned detached debris, preserved the full head/shield silhouette, and assembled a transparent 2×2 directional master at `assets/zombies/new-batch-02/masters/captain_zombie_4dir.png`.
+5. Validated the master as `1024×1024` RGBA with alpha range `0–255`.
+6. Added `captain_zombie` data as a slow shield tank: 210 HP, speed 22, damage 11, 2.55 s attack interval, radius 19.
+7. Registered the master, concept portrait, render scale, draw size, Russian picker label `ЗОНБДЕ-КАПИТАН`, normal mixed-wave pool, and Hater Raid `Новые зомби` roster.
+8. Added a restrained cool-blue shield-presence ellipse so the heavy unit reads clearly without adding a global filter.
+9. Ran `node --check src/game.js`, `node --check src/hater-raid.js`, JSON loading, image dimensions, and alpha validation; all passed.
+10. Browser-tested the new-zombie picker: the Captain card appeared, its 1024×1536 concept portrait loaded, selection worked, and Hater Raid launched on the Canvas.
+11. Captured the live runtime: the character rendered at readable scale with shield and full silhouette; no black/checkerboard rectangle appeared.
+12. Checked browser logs for `error`, `failed`, `404`, and Captain asset failures; none were found.

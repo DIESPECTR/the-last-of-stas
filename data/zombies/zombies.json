@@ -242,6 +242,39 @@
       "radius": 17,
       "color": "#b1332b",
       "drop": {"metal_scrap": 2, "battery": 2, "teeth": 2}
+    },
+    {
+      "id": "pickme_zombie",
+      "display_name": "Пикми-зомбе",
+      "hp": 54,
+      "speed": 40,
+      "damage": 4,
+      "attack_interval": 1.65,
+      "radius": 11,
+      "color": "#ff5ca8",
+      "drop": {"cloth": 1, "teeth": 1}
+    },
+    {
+      "id": "witch_broom_zombie",
+      "display_name": "Зомбе-ведьма",
+      "hp": 74,
+      "speed": 48,
+      "damage": 7,
+      "attack_interval": 2.1,
+      "radius": 14,
+      "color": "#d946ef",
+      "drop": {"infected_fluid": 1, "cloth": 1, "battery": 1}
+    },
+    {
+      "id": "captain_zombie",
+      "display_name": "Зонбде-капитан",
+      "hp": 220,
+      "speed": 21,
+      "damage": 12,
+      "attack_interval": 2.35,
+      "radius": 19,
+      "color": "#566b86",
+      "drop": {"metal_scrap": 3, "cloth": 1, "battery": 1}
     }
   ]
 }

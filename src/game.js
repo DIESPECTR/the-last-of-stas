@@ -108,7 +108,10 @@ const ZOMBIE_MASTERS={
   vomiting_alexander:'../assets/zombies/new-batch-01/masters/vomiting_alexander_4dir_master_alpha.png',
   lilliput:'../assets/zombies/new-batch-01/masters/lilliput_zombie_4dir_master_alpha.png',
   lumberjack_zombie:'../assets/zombies/new-batch-01/masters/lumberjack_zombie_4dir_master_alpha.png',
-  injured_kuok:'../assets/zombies/new-batch-01/masters/injured_kuok_4dir_master_alpha.png'
+  injured_kuok:'../assets/zombies/new-batch-01/masters/injured_kuok_4dir_master_alpha.png',
+  pickme_zombie:'../assets/zombies/new-batch-02/masters/pickme_zombie_4dir.png',
+  witch_broom_zombie:'../assets/zombies/new-batch-02/masters/witch_broom_zombie_4dir.png',
+  captain_zombie:'../assets/zombies/new-batch-02/masters/captain_zombie_4dir.png'
 };
 const zombieSheets=new Map(Object.entries(ZOMBIE_MASTERS).map(([id,path])=>{const image=new Image();image.src=path;return [id,image]}));
 function directionCell(angle){return Math.abs(Math.cos(angle))>Math.abs(Math.sin(angle))?(Math.cos(angle)>0?3:2):(Math.sin(angle)>0?0:1)}
@@ -149,9 +152,12 @@ const ANIM_SCALE={
   lilliput:.72,
   lumberjack_zombie:1.18,
   big_russian_boss:1.08,
-  injured_kuok:1.2
+  injured_kuok:1.2,
+  pickme_zombie:1.08,
+  witch_broom_zombie:1.18,
+  captain_zombie:1.22
 };
-const ZOMBIE_DRAW_SIZE={drifter:72,runner:64,spitter:82,glamour_drifter:72,office_runner:64,heavy_spitter:82,silent_stalker:68,boss_zombie:86,bespectacled_teacher:74,communist_nikita:76,tattooed_crowd_zombie:76,blonde_crowd_zombie:76,plaid_glasses_zombie:76,brunette_crowd_zombie:76,cat_keeper:76,dog_handler_zombie:96,mommy_zombie:90,vomiting_alexander:84,lilliput:50,lumberjack_zombie:92,big_russian_boss:142,injured_kuok:138,main_hater:92};
+const ZOMBIE_DRAW_SIZE={drifter:72,runner:64,spitter:82,glamour_drifter:72,office_runner:64,heavy_spitter:82,silent_stalker:68,boss_zombie:86,bespectacled_teacher:74,communist_nikita:76,tattooed_crowd_zombie:76,blonde_crowd_zombie:76,plaid_glasses_zombie:76,brunette_crowd_zombie:76,cat_keeper:76,dog_handler_zombie:96,mommy_zombie:90,vomiting_alexander:84,lilliput:50,lumberjack_zombie:92,big_russian_boss:142,injured_kuok:138,main_hater:92,pickme_zombie:80,witch_broom_zombie:112,captain_zombie:108};
 const FRIEND_SUMMON_TYPES=['glamour_drifter','office_runner','heavy_spitter','silent_stalker','boss_zombie','bespectacled_teacher'];
 const BOSS_PHASES=[.75,.5,.25];
 const animationSheets=new Map();
@@ -244,18 +250,18 @@ function crushBlacks(){
 let state,sessionId=0;
 let haterRaid=null,selectedRaidZombie='glamour_drifter',activeRaidTab='specials',raidTaunts=[];
 const RAID_NAMES={
-  communist_nikita:'КОММУНИСТ НИКИТА',tattooed_crowd_zombie:'ЗОМБИ С ТАТУ',blonde_crowd_zombie:'БЛОНДИНКА',plaid_glasses_zombie:'ОЧКИ И КЛЕТКА',brunette_crowd_zombie:'БРЮНЕТКА',cat_keeper:'ЗОМБИ С КОТОМ',dog_handler_zombie:'ЗОМБИ С СОБАКОЙ',mommy_zombie:'ЗОМБИ-МАМОЧКА',main_hater:'ГЛАВНЫЙ ХЕЙТЕР',vomiting_alexander:'БЛЮЮЩИЙ АЛЕКСАНДР',lilliput:'ЛИЛИПУТ',lumberjack_zombie:'ДРОВОСЕК',injured_kuok:'КУОК НА КОСТЫЛЯХ',
+  communist_nikita:'КОММУНИСТ НИКИТА',tattooed_crowd_zombie:'ЗОМБИ С ТАТУ',blonde_crowd_zombie:'БЛОНДИНКА',plaid_glasses_zombie:'ОЧКИ И КЛЕТКА',brunette_crowd_zombie:'БРЮНЕТКА',cat_keeper:'ЗОМБИ С КОТОМ',dog_handler_zombie:'ЗОМБИ С СОБАКОЙ',mommy_zombie:'ЗОМБИ-МАМОЧКА',main_hater:'ГЛАВНЫЙ ХЕЙТЕР',vomiting_alexander:'БЛЮЮЩИЙ АЛЕКСАНДР',lilliput:'ЛИЛИПУТ',lumberjack_zombie:'ДРОВОСЕК',injured_kuok:'КУОК НА КОСТЫЛЯХ',pickme_zombie:'ПИКМИ-ЗОМБЕ',witch_broom_zombie:'ЗОМБЕ-ВЕДЬМА',captain_zombie:'ЗОНБДЕ-КАПИТАН',
   glamour_drifter:'ГЛАМУРНАЯ',office_runner:'ОФИСНЫЙ',heavy_spitter:'ТЯЖЁЛАЯ',silent_stalker:'ТИХОНЯ',bespectacled_teacher:'ОЧКАСТАЯ УЧИЛКА',boss_zombie:'БРЮНЕТКА-БОСС'
 };
 const RAID_PORTRAITS={
   glamour_drifter:'assets/promos/zombie-portraits/glamour_drifter.png',office_runner:'assets/promos/zombie-portraits/office_runner.png',heavy_spitter:'assets/promos/zombie-portraits/heavy_spitter.png',silent_stalker:'assets/promos/zombie-portraits/silent_stalker.png',bespectacled_teacher:'assets/promos/zombie-portraits/bespectacled_teacher.png',boss_zombie:'assets/promos/zombie-portraits/brunette_boss.png',
-  communist_nikita:'assets/zombies/new-batch-01/communist_nikita.png',tattooed_crowd_zombie:'assets/zombies/new-batch-01/tattooed_crowd_zombie.png',blonde_crowd_zombie:'assets/zombies/new-batch-01/blonde_crowd_zombie.png',plaid_glasses_zombie:'assets/zombies/new-batch-01/plaid_glasses_zombie.png',brunette_crowd_zombie:'assets/zombies/new-batch-01/brunette_crowd_zombie.png',cat_keeper:'assets/zombies/new-batch-01/cat_keeper_zombie.png',dog_handler_zombie:'assets/zombies/new-batch-01/dog_handler_zombie.png',mommy_zombie:'assets/zombies/new-batch-01/mommy_zombie.png',main_hater:'assets/zombies/new-batch-01/main_hater.png',vomiting_alexander:'assets/zombies/new-batch-01/vomiting_alexander.png',lilliput:'assets/zombies/new-batch-01/lilliput_zombie.png',lumberjack_zombie:'assets/zombies/new-batch-01/lumberjack_zombie.png',injured_kuok:'assets/zombies/new-batch-01/injured_kuok.png'
+  communist_nikita:'assets/zombies/new-batch-01/communist_nikita.png',tattooed_crowd_zombie:'assets/zombies/new-batch-01/tattooed_crowd_zombie.png',blonde_crowd_zombie:'assets/zombies/new-batch-01/blonde_crowd_zombie.png',plaid_glasses_zombie:'assets/zombies/new-batch-01/plaid_glasses_zombie.png',brunette_crowd_zombie:'assets/zombies/new-batch-01/brunette_crowd_zombie.png',cat_keeper:'assets/zombies/new-batch-01/cat_keeper_zombie.png',dog_handler_zombie:'assets/zombies/new-batch-01/dog_handler_zombie.png',mommy_zombie:'assets/zombies/new-batch-01/mommy_zombie.png',main_hater:'assets/zombies/new-batch-01/main_hater.png',vomiting_alexander:'assets/zombies/new-batch-01/vomiting_alexander.png',lilliput:'assets/zombies/new-batch-01/lilliput_zombie.png',lumberjack_zombie:'assets/zombies/new-batch-01/lumberjack_zombie.png',injured_kuok:'assets/zombies/new-batch-01/injured_kuok.png',pickme_zombie:'assets/zombies/new-batch-02/concepts/pickme_zombie_v1.png',witch_broom_zombie:'assets/zombies/new-batch-02/concepts/witch_broom_zombie_v2.png',captain_zombie:'assets/zombies/new-batch-02/concepts/captain_zombie.png'
 };
 // Picker imagery is concept art, never runtime sprite sheets. A per-character fallback prevents a broken
 // request or stale cache from producing an empty black card while keeping the primary art full-body.
 const RAID_PORTRAIT_FALLBACKS={
   glamour_drifter:'assets/zombies/friends/glamour_drifter_initial.png',office_runner:'assets/zombies/friends/office_runner_initial.png',heavy_spitter:'assets/zombies/friends/heavy_spitter_initial.png',silent_stalker:'assets/zombies/friends/silent_stalker_initial.png',bespectacled_teacher:'assets/zombies/friends/bespectacled_teacher_initial.png',boss_zombie:'assets/zombies/friends/brunette_boss_initial.png',
-  communist_nikita:'assets/zombies/new-batch-01/masters/communist_nikita_4dir_master_alpha.png',tattooed_crowd_zombie:'assets/zombies/new-batch-01/masters/tattooed_crowd_zombie_4dir_master_alpha.png',blonde_crowd_zombie:'assets/zombies/new-batch-01/masters/blonde_crowd_zombie_4dir_master_alpha.png',plaid_glasses_zombie:'assets/zombies/new-batch-01/masters/plaid_glasses_zombie_4dir_master_alpha.png',brunette_crowd_zombie:'assets/zombies/new-batch-01/masters/brunette_crowd_zombie_4dir_master_alpha.png',cat_keeper:'assets/zombies/new-batch-01/masters/cat_keeper_zombie_4dir_master_alpha.png',dog_handler_zombie:'assets/zombies/new-batch-01/masters/dog_handler_zombie_4dir_master_alpha.png',mommy_zombie:'assets/zombies/new-batch-01/masters/mommy_zombie_4dir_master_alpha.png',main_hater:'assets/zombies/new-batch-01/main_hater_runtime.png',vomiting_alexander:'assets/zombies/new-batch-01/masters/vomiting_alexander_4dir_master_alpha.png',lilliput:'assets/zombies/new-batch-01/masters/lilliput_zombie_4dir_master_alpha.png',lumberjack_zombie:'assets/zombies/new-batch-01/masters/lumberjack_zombie_4dir_master_alpha.png',injured_kuok:'assets/zombies/new-batch-01/masters/injured_kuok_4dir_master_alpha.png'
+  communist_nikita:'assets/zombies/new-batch-01/masters/communist_nikita_4dir_master_alpha.png',tattooed_crowd_zombie:'assets/zombies/new-batch-01/masters/tattooed_crowd_zombie_4dir_master_alpha.png',blonde_crowd_zombie:'assets/zombies/new-batch-01/masters/blonde_crowd_zombie_4dir_master_alpha.png',plaid_glasses_zombie:'assets/zombies/new-batch-01/masters/plaid_glasses_zombie_4dir_master_alpha.png',brunette_crowd_zombie:'assets/zombies/new-batch-01/masters/brunette_crowd_zombie_4dir_master_alpha.png',cat_keeper:'assets/zombies/new-batch-01/masters/cat_keeper_zombie_4dir_master_alpha.png',dog_handler_zombie:'assets/zombies/new-batch-01/masters/dog_handler_zombie_4dir_master_alpha.png',mommy_zombie:'assets/zombies/new-batch-01/masters/mommy_zombie_4dir_master_alpha.png',main_hater:'assets/zombies/new-batch-01/main_hater_runtime.png',vomiting_alexander:'assets/zombies/new-batch-01/masters/vomiting_alexander_4dir_master_alpha.png',lilliput:'assets/zombies/new-batch-01/masters/lilliput_zombie_4dir_master_alpha.png',lumberjack_zombie:'assets/zombies/new-batch-01/masters/lumberjack_zombie_4dir_master_alpha.png',injured_kuok:'assets/zombies/new-batch-01/masters/injured_kuok_4dir_master_alpha.png',pickme_zombie:'assets/zombies/new-batch-02/masters/pickme_zombie_4dir.png',witch_broom_zombie:'assets/zombies/new-batch-02/masters/witch_broom_zombie_4dir.png',captain_zombie:'assets/zombies/new-batch-02/masters/captain_zombie_4dir.png'
 };
 const GAME_RESULTS={
   'stas-victory':{image:'assets/ui/endings/stas-victory.png',stamp:'РАССВЕТ',title:'ПЕСНЯ ДОИГРАЛА',copy:'Дом ещё стоит. Зомби закончились раньше, чем трек.',alt:'Стас победил зомби и сохранил колонку'},
@@ -616,7 +622,7 @@ function spawn(typeId){
 // same wave composition without the wall-clock stagger, so it can flip this to an instant spawn.
 let instantSpawn=false;
 const ORDINARY_BOSS_IDS=new Set(['boss_zombie','big_russian_boss','injured_kuok']);
-const FRIEND_ZOMBIE_IDS=new Set(['communist_nikita','tattooed_crowd_zombie','blonde_crowd_zombie','plaid_glasses_zombie','brunette_crowd_zombie','cat_keeper','dog_handler_zombie','vomiting_alexander','lilliput','lumberjack_zombie','main_hater']);
+const FRIEND_ZOMBIE_IDS=new Set(['communist_nikita','tattooed_crowd_zombie','blonde_crowd_zombie','plaid_glasses_zombie','brunette_crowd_zombie','cat_keeper','dog_handler_zombie','vomiting_alexander','lilliput','lumberjack_zombie','main_hater','pickme_zombie','witch_broom_zombie','captain_zombie']);
 function shuffle(items){const result=[...items];for(let i=result.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[result[i],result[j]]=[result[j],result[i]]}return result}
 function buildWaveRoster(w){
   // Bosses are encounter-only. Friend identities are unique within a wave; generic archetypes fill any overflow.
@@ -1184,6 +1190,23 @@ function reelFocus(){
   const s=state.shelter,p=state.player;
   return {x:s.centerX*.72+p.x*.28,y:s.centerY};
 }
+function drawZombieSignatureFx(entity,{selected=false}={}){
+  const now=performance.now()/1000;
+  if(entity.id==='pickme_zombie'){
+    ctx.save();ctx.textAlign='center';ctx.font=`${selected?16:13}px sans-serif`;ctx.fillStyle='#ff63b6';ctx.shadowColor='#ff3fa5';ctx.shadowBlur=7;
+    for(let i=0;i<3;i++){const phase=now*1.7+i*2.1,x=entity.x+Math.sin(phase)*18,y=entity.y-28-i*10-Math.sin(phase*1.4)*4;ctx.globalAlpha=.42+.35*(.5+.5*Math.sin(phase));ctx.fillText('♥',x,y)}
+    ctx.restore();
+  }
+  if(entity.id==='witch_broom_zombie'){
+    const hover=Math.sin(now*2.4+(entity.x||0)*.01)*4;
+    ctx.save();ctx.globalAlpha=.2;ctx.fillStyle='#a42ee8';ctx.beginPath();ctx.ellipse(entity.x,entity.y+12,selected?34:28,selected?11:9,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=.38;ctx.strokeStyle='#f05bd9';ctx.lineWidth=2;ctx.beginPath();ctx.arc(entity.x,entity.y+8,18+Math.sin(now*3)*3,0,Math.PI*2);ctx.stroke();ctx.restore();
+    return entity.y-8+hover;
+  }
+  if(entity.id==='captain_zombie'){
+    ctx.save();ctx.globalAlpha=selected?.72:.42;ctx.strokeStyle='#b9ccdf';ctx.lineWidth=selected?3:2;ctx.beginPath();ctx.arc(entity.x,entity.y-3,selected?30:26,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=.18;ctx.fillStyle='#6f87a1';ctx.beginPath();ctx.ellipse(entity.x,entity.y+10,selected?35:30,selected?12:9,0,0,Math.PI*2);ctx.fill();ctx.restore();
+  }
+  return entity.y;
+}
 function draw(){
   // The frame transform carries DPR and the shake offset together: every draw call below stays in
   // 960×600 world coordinates and still lands on a crisp retina backing store. It lives HERE rather
@@ -1251,15 +1274,15 @@ function draw(){
   for(const z of state.zombies){
     const moveAngle=z.faceAngle??Math.atan2(state.shelter.centerY-z.y,state.shelter.centerX-z.x);
     const direction=directionCell(moveAngle),size=ZOMBIE_DRAW_SIZE[z.id]||72,renderSize=size*(ANIM_SCALE[z.id]||1);
-    const tint=z.hitFlash>0?'#e7d8bbaa':null,rim=z.hitFlash>0?'#f3e6c4':null;
+    const visualY=drawZombieSignatureFx(z),tint=z.hitFlash>0?'#e7d8bbaa':null,rim=z.hitFlash>0?'#f3e6c4':null;
     if(z.id==='main_hater'){const pulse=.5+.5*Math.sin(performance.now()*.007);ctx.save();ctx.globalAlpha=.13+pulse*.07;ctx.strokeStyle='#e34232';ctx.lineWidth=3;ctx.beginPath();ctx.arc(z.x,z.y,MAIN_HATER_AURA.range,0,Math.PI*2);ctx.stroke();ctx.restore()}
-    const staticHater=z.id==='main_hater'&&drawRuntimeCutout(mainHaterSprite,z.x,z.y,92,{flip:direction===2,tint,shadow:9});
-    const animated=staticHater||drawAnimatedSprite(ctx,z.id,z.animAction||'walk',direction,z.x,z.y,renderSize,z.animTime,{tint,shadow:9,rim,rimAlpha:z.hitFlash>0?.85:rimNight});
+    const staticHater=z.id==='main_hater'&&drawRuntimeCutout(mainHaterSprite,z.x,visualY,92,{flip:direction===2,tint,shadow:9});
+    const animated=staticHater||drawAnimatedSprite(ctx,z.id,z.animAction||'walk',direction,z.x,visualY,renderSize,z.animTime,{tint,shadow:9,rim,rimAlpha:z.hitFlash>0?.85:rimNight});
     // These two four-pose masters contain a dark baked matte. Never flash that rectangle while a real 4×4 sheet is loading.
     const skipMasterFallback=z.id==='vomiting_alexander'||z.id==='lumberjack_zombie';
-    const rendered=animated||(!skipMasterFallback&&drawDirectionSprite(ctx,zombieSheets.get(z.id),direction,z.x,z.y,size,{tint,shadow:9,rim,rimAlpha:z.hitFlash>0?.85:rimNight}));
-    if(!rendered){ctx.save();ctx.translate(z.x,z.y);ctx.fillStyle='#2b2c25';ctx.beginPath();ctx.ellipse(0,2,z.radius*.75,z.radius*1.25,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle=z.color;ctx.lineWidth=2;ctx.stroke();ctx.restore()}
-    const barY=z.y-(rendered?renderSize*.84:size*.58),kind=zombieTypes.get(z.id);
+    const rendered=animated||(!skipMasterFallback&&drawDirectionSprite(ctx,zombieSheets.get(z.id),direction,z.x,visualY,size,{tint,shadow:9,rim,rimAlpha:z.hitFlash>0?.85:rimNight}));
+    if(!rendered){ctx.save();ctx.translate(z.x,visualY);ctx.fillStyle='#2b2c25';ctx.beginPath();ctx.ellipse(0,2,z.radius*.75,z.radius*1.25,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle=z.color;ctx.lineWidth=2;ctx.stroke();ctx.restore()}
+    const barY=visualY-(rendered?renderSize*.84:size*.58),kind=zombieTypes.get(z.id);
     ctx.fillStyle='#151512';ctx.fillRect(z.x-z.radius,barY,z.radius*2,3);
     ctx.fillStyle=z.id==='heavy_spitter'?'#82924c':z.id==='boss_zombie'?'#7d2e29':'#8e372a';
     ctx.fillRect(z.x-z.radius,barY,z.radius*2*(z.hp/(kind?.hp||z.hp||1)),3);
@@ -1270,13 +1293,13 @@ function draw(){
     for(const rz of raidBodies){
       const selected=rz===haterRaid.player,direction=directionCell(rz.faceAngle),base=ZOMBIE_DRAW_SIZE[rz.id]||72;
       // KUOK is boss-sized only in Stas defence. In Hater Raid he is a normal playable body.
-      const size=rz.id==='injured_kuok'?78:base*(ANIM_SCALE[rz.id]||1);
+      const size=rz.id==='injured_kuok'?78:base*(ANIM_SCALE[rz.id]||1),visualY=drawZombieSignatureFx(rz,{selected});
       const raidTint=rz.hitFlash>0?'#e7d8bbaa':null;
-      const raidStatic=rz.id==='main_hater'&&drawRuntimeCutout(mainHaterSprite,rz.x,rz.y,size,{flip:direction===2,tint:raidTint,shadow:selected?10:8});
-      raidStatic||drawAnimatedSprite(ctx,rz.id,rz.animAction||'idle',direction,rz.x,rz.y,size,rz.animTime,{tint:raidTint,shadow:selected?10:8,rim:selected?'#b5d8a0':null,rimAlpha:selected?.42:0})
-        ||drawDirectionSprite(ctx,zombieSheets.get(rz.id),direction,rz.x,rz.y,base,{tint:raidTint,shadow:selected?10:8,rim:selected?'#b5d8a0':null,rimAlpha:selected?.42:0});
+      const raidStatic=rz.id==='main_hater'&&drawRuntimeCutout(mainHaterSprite,rz.x,visualY,size,{flip:direction===2,tint:raidTint,shadow:selected?10:8});
+      raidStatic||drawAnimatedSprite(ctx,rz.id,rz.animAction||'idle',direction,rz.x,visualY,size,rz.animTime,{tint:raidTint,shadow:selected?10:8,rim:selected?'#b5d8a0':null,rimAlpha:selected?.42:0})
+        ||drawDirectionSprite(ctx,zombieSheets.get(rz.id),direction,rz.x,visualY,base,{tint:raidTint,shadow:selected?10:8,rim:selected?'#b5d8a0':null,rimAlpha:selected?.42:0});
       const hp=Math.max(0,rz.hp/rz.maxHp),barWidth=selected?68:42,barHeight=selected?5:3;
-      ctx.fillStyle='#111';ctx.fillRect(rz.x-barWidth/2,rz.y-size*.66,barWidth,barHeight);ctx.fillStyle=selected?'#b44737':'#7f8655';ctx.fillRect(rz.x-barWidth/2,rz.y-size*.66,barWidth*hp,barHeight);
+      ctx.fillStyle='#111';ctx.fillRect(rz.x-barWidth/2,visualY-size*.66,barWidth,barHeight);ctx.fillStyle=selected?'#b44737':'#7f8655';ctx.fillRect(rz.x-barWidth/2,visualY-size*.66,barWidth*hp,barHeight);
     }
     const rs=haterRaid.speaker,shp=Math.max(0,rs.hp/rs.maxHp);ctx.fillStyle='#111';ctx.fillRect(rs.x-44,rs.y-46,88,6);ctx.fillStyle=rs.hitFlash>0?'#fff0bc':'#d35a43';ctx.fillRect(rs.x-44,rs.y-46,88*shp,6);
     ctx.fillStyle='#e6dfcb';ctx.font='bold 10px Chivo Mono';ctx.textAlign='center';ctx.fillText(`КОЛОНКА ${Math.ceil(rs.hp)}`,rs.x,rs.y-52);ctx.textAlign='start';

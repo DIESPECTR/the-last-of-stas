@@ -3,7 +3,7 @@
 // Hater Raid picker: the friends/new originals are intentionally separate from the first six special archetypes.
 // Every id remains playable; the compact second group stays the AI crowd so a raid does not turn into a 15-body rush.
 export const RAID_TABS={
-  originals:['communist_nikita','injured_kuok','tattooed_crowd_zombie','blonde_crowd_zombie','plaid_glasses_zombie','brunette_crowd_zombie','cat_keeper','dog_handler_zombie','mommy_zombie','main_hater','vomiting_alexander','lilliput','lumberjack_zombie'],
+  originals:['communist_nikita','injured_kuok','tattooed_crowd_zombie','blonde_crowd_zombie','plaid_glasses_zombie','brunette_crowd_zombie','cat_keeper','dog_handler_zombie','mommy_zombie','main_hater','vomiting_alexander','lilliput','lumberjack_zombie','pickme_zombie','witch_broom_zombie','captain_zombie'],
   specials:['glamour_drifter','office_runner','heavy_spitter','silent_stalker','bespectacled_teacher','boss_zombie']
 };
 export const RAID_ROSTER=[...RAID_TABS.originals,...RAID_TABS.specials];
@@ -110,7 +110,9 @@ export function createHaterRaid(type,world,shelter,speaker,zombieTypes){
 export function shoutRaidTaunt(raid,line){
   if(!raid||raid.phase!=='active'||raid.tauntCooldown>0||!line)return false;
   raid.bubble={text:line,life:3.3,maxLife:3.3};
-  raid.provocation=Math.min(100,raid.provocation+RAID_BALANCE.tauntGain);
+  const heartCharm=raid.type==='pickme_zombie';
+  raid.provocation=Math.min(100,raid.provocation+RAID_BALANCE.tauntGain+(heartCharm?10:0));
+  if(heartCharm)raid.player.hp=Math.min(raid.player.maxHp,raid.player.hp+4);
   raid.provocationHold=RAID_BALANCE.provocationHold;
   raid.tauntCooldown=RAID_BALANCE.tauntCooldown;
   raid.effects.push({type:'taunt',x:raid.player.x,y:raid.player.y,life:.55,maxLife:.55});
@@ -169,7 +171,7 @@ export function updateHaterRaid(raid,dt,input,world,collideShelter,advanceAnimat
     return;
   }
   const dx=input.dx||0,dy=input.dy||0,magnitude=Math.hypot(dx,dy)||1;
-  const oldX=p.x,oldY=p.y,speedBoost=raid.boost?.time>0?(raid.boost.speed||1):1;
+  const oldX=p.x,oldY=p.y,flightBoost=raid.type==='witch_broom_zombie'?1.14:1,speedBoost=(raid.boost?.time>0?(raid.boost.speed||1):1)*flightBoost;
   p.x=Math.max(20,Math.min(world.width-20,p.x+dx/magnitude*p.speed*RAID_BALANCE.moveMultiplier*speedBoost*dt));
   p.y=Math.max(20,Math.min(world.height-20,p.y+dy/magnitude*p.speed*RAID_BALANCE.moveMultiplier*speedBoost*dt));
   // Only the intact section under the body blocks movement; every destroyed section is a real passage.

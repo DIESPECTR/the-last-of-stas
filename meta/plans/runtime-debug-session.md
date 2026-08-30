@@ -1,6 +1,6 @@
 ---
 SECTION_ID: plans.runtime-debug-session
-STATUS: done
+STATUS: in_progress
 TYPE: plan
 ---
 
@@ -23,3 +23,10 @@ TYPE: plan
 - [x] Add a visible module boot failure path instead of silent dead controls
 - [x] Validate Stas mode, Hater Raid, pointer input and console in production-like browser runs
 - [x] Deploy, verify response cache headers and record the incident in the chronological action log
+
+## 2026-08-29 cross-browser execution follow-up
+
+- [ ] Complete isolated Playwright Firefox and WebKit installation
+- [x] Run production start-card, Stas mode, Hater Raid and console smoke-test in Firefox
+- [ ] Run the same production smoke-test in WebKit (Safari engine)
+- [ ] Record engine versions/results, close the plan and push the evidence
