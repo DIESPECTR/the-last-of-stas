@@ -1,6 +1,6 @@
 ---
 SECTION_ID: plans.medic-visibility-hotfix
-STATUS: in_progress
+STATUS: completed
 TYPE: plan
 ---
 
@@ -11,4 +11,4 @@ TYPE: plan
 - [x] Increase sprite prominence and add an unmistakable medic marker
 - [x] Preserve healing coverage throughout the shelter
 - [x] Browser-test visibility and healing
-- [ ] Record results and deploy
+- [x] Record results and deploy

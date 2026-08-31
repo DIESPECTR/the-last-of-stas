@@ -1514,3 +1514,7 @@ Purpose: chronological source material for a future development scenario/video s
 6. Browser-tested outside and inside views on the local production-like server; the roof marker and full interior character both render at readable scale.
 7. Re-ran the deterministic heal probe: Stas recovered from 50 HP to 62 HP and the 6.5 s cooldown triggered correctly.
 8. Checked browser console for errors, failed requests, 404s, TypeErrors and ReferenceErrors; none were found.
+9. Pushed commit `cc9b933` to `main`; Railway completed the automatic production deployment.
+10. Verified the deployed `/src/game.js` contains the fixed station, 72 px interior scale, 220-unit healing range and roof-level medical marker.
+11. Final production screenshots confirmed the medical cross is visible from outside and the full Zombie Medic is visible inside the right shelter room.
+12. Final production heal probe again restored Stas from 50 HP to 62 HP; console remained clear of runtime and asset-loading errors.
