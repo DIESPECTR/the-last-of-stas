@@ -1,6 +1,6 @@
 ---
 SECTION_ID: plans.captain-zombie
-STATUS: in_progress
+STATUS: completed
 TYPE: plan
 ---
 

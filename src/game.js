@@ -82,7 +82,7 @@ const NINJA_ALLY={speed:125,radius:10,damage:12,attackInterval:1.25,range:27,fol
 const SECOND_DEFENDER_ALLY={...NINJA_ALLY};
 const secondDefenderSprite=new Image();secondDefenderSprite.src='../assets/allies/second_defender_runtime.png?v=1';
 // The medic is a non-combat house support: he stays indoors and restores Stas only at close range.
-const MEDIC_ALLY={speed:78,healAmount:12,healInterval:6.5,healRange:105};
+const MEDIC_ALLY={speed:62,healAmount:12,healInterval:6.5,healRange:220};
 const medicAllySprite=new Image();medicAllySprite.src='../assets/allies/zombie_medic_runtime.png?v=1';
 // Main Hater ships as a clean static cutout first; animation can be authored later without blocking gameplay.
 const mainHaterSprite=new Image();mainHaterSprite.src='../assets/zombies/new-batch-01/main_hater_runtime.png?v=1';
@@ -575,7 +575,7 @@ function reset(){
     // Present immediately in level one: autonomous, friendly and never selectable as a hostile target.
     ninjaAlly:{x:scenario.player.x-42,y:scenario.player.y+22,followOffsetX:-38,followOffsetY:24,faceAngle:0,attack:0,attackTimer:0,hitFlash:0,animTime:0,kills:0},
     // Friendly medic is present from level one but stays inside the house and heals only at close range.
-    medicAlly:{x:shelter.centerX+66,y:shelter.centerY+34,faceAngle:Math.PI,healTimer:2.5,healFlash:0,moving:false},
+    medicAlly:{x:shelter.centerX+72,y:shelter.centerY+25,faceAngle:Math.PI,healTimer:2.5,healFlash:0,moving:false},
     // Joins only when the third wave is armed. Kept null before then so the early yard stays readable.
     secondDefender:null,
     shelter,
@@ -799,9 +799,9 @@ function updateMedicAlly(dt){
   const medic=state.medicAlly;if(!medic)return;
   const shelter=state.shelter,p=state.player,padding=30;
   medic.healTimer=Math.max(0,medic.healTimer-dt);medic.healFlash=Math.max(0,medic.healFlash-dt);
-  // Follow Stas only while he is inside; otherwise hold a readable support position near the speaker.
-  const targetX=p.inside?Math.max(shelter.x+padding,Math.min(shelter.x+shelter.width-padding,p.x+48)):shelter.centerX+66;
-  const targetY=p.inside?Math.max(shelter.y+padding,Math.min(shelter.y+shelter.height-padding,p.y+26)):shelter.centerY+34;
+  // Keep the medic at a dedicated visible station instead of letting him overlap and disappear behind Stas.
+  const targetX=shelter.centerX+72;
+  const targetY=shelter.centerY+25;
   const dx=targetX-medic.x,dy=targetY-medic.y,distance=Math.hypot(dx,dy)||1;
   medic.moving=distance>10;
   if(medic.moving){medic.x+=dx/distance*MEDIC_ALLY.speed*dt;medic.y+=dy/distance*MEDIC_ALLY.speed*dt;medic.faceAngle=Math.atan2(dy,dx)}
@@ -1180,10 +1180,15 @@ function drawRuntimeCutout(image,x,y,width,{flip=false,tint=null,shadow=7}={}){
 function drawMedicAlly(){
   const medic=state.medicAlly;if(!medic||haterRaid?.active)return;
   const pulse=medic.healFlash>0?medic.healFlash/.85:0;
-  ctx.save();ctx.globalAlpha=.24+pulse*.25;ctx.fillStyle=pulse?'#8fffb5':'#78c99a';ctx.beginPath();ctx.ellipse(medic.x,medic.y+5,23+pulse*13,9+pulse*5,0,0,Math.PI*2);ctx.fill();ctx.restore();
-  drawRuntimeCutout(medicAllySprite,medic.x,medic.y,70,{flip:Math.cos(medic.faceAngle||0)<0,shadow:5});
-  if(pulse){ctx.save();ctx.globalAlpha=pulse;ctx.strokeStyle='#b8ffd0';ctx.lineWidth=3;ctx.beginPath();ctx.arc(medic.x,medic.y-32,17+(1-pulse)*18,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#d8ffe2';ctx.fillRect(medic.x-3,medic.y-44,6,24);ctx.fillRect(medic.x-12,medic.y-35,24,6);ctx.restore()}
-  ctx.save();ctx.textAlign='center';ctx.font='bold 9px "Chivo Mono",monospace';ctx.fillStyle='#9fe8bc';ctx.fillText('СОЮЗНИК · МЕДИК',medic.x,medic.y+18);ctx.restore();
+  ctx.save();ctx.globalAlpha=.24+pulse*.25;ctx.fillStyle=pulse?'#8fffb5':'#78c99a';ctx.beginPath();ctx.ellipse(medic.x,medic.y+5,21+pulse*11,8+pulse*4,0,0,Math.PI*2);ctx.fill();ctx.restore();
+  drawRuntimeCutout(medicAllySprite,medic.x,medic.y,72,{flip:Math.cos(medic.faceAngle||0)<0,shadow:6});
+  if(pulse){ctx.save();ctx.globalAlpha=pulse;ctx.strokeStyle='#b8ffd0';ctx.lineWidth=3;ctx.beginPath();ctx.arc(medic.x,medic.y-34,17+(1-pulse)*18,0,Math.PI*2);ctx.stroke();ctx.restore()}
+  ctx.save();ctx.textAlign='center';ctx.font='bold 9px "Chivo Mono",monospace';ctx.fillStyle='#c7f8d6';ctx.shadowColor='#06120b';ctx.shadowBlur=4;ctx.fillText('ЗОМБЕ-МЕДИК',medic.x,medic.y+20);ctx.restore();
+}
+function drawMedicMarker(){
+  const medic=state.medicAlly;if(!medic||haterRaid?.active)return;
+  const bob=Math.sin(performance.now()*.004)*2,x=medic.x+30,y=medic.y-62+bob;
+  ctx.save();ctx.shadowColor='#000c';ctx.shadowBlur=6;ctx.fillStyle='#eee9dc';ctx.strokeStyle='#26372d';ctx.lineWidth=2;ctx.fillRect(x-12,y-12,24,24);ctx.strokeRect(x-12,y-12,24,24);ctx.fillStyle='#b83b35';ctx.fillRect(x-3,y-9,6,18);ctx.fillRect(x-9,y-3,18,6);ctx.restore();
 }
 function reelFocus(){
   if(!state)return {x:WORLD.width/2,y:WORLD.height/2};
@@ -1343,6 +1348,8 @@ function draw(){
   // texture-hook contract as the interior: the hook returns false while the PNG is still decoding, and
   // the procedural fallback covers that one frame instead of leaving a hole where the building is.
   drawShelterRoof(ctx,state.shelter,p,WORLD.width,WORLD.height,shelterTextures);
+  // Keep the medic discoverable even while the roof masks the interior from the yard.
+  drawMedicMarker();
   // Sound rings sit ABOVE the roof so the yard reads "the house is blasting Зомбэ" even from the street.
   drawSpeakerWaves(ctx,speakers,state.shelter,{chorus:state.phase==='wave'&&trackBeat().chorus});
   // The other half of the perspective read: from inside, the yard exists only inside the window wedges.

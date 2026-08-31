@@ -1486,3 +1486,31 @@ Purpose: chronological source material for a future development scenario/video s
 10. Browser-tested the new-zombie picker: the Captain card appeared, its 1024×1536 concept portrait loaded, selection worked, and Hater Raid launched on the Canvas.
 11. Captured the live runtime: the character rendered at readable scale with shield and full silhouette; no black/checkerboard rectangle appeared.
 12. Checked browser logs for `error`, `failed`, `404`, and Captain asset failures; none were found.
+
+13. Verified Railway production deployment at `https://the-last-of-stas-web-production.up.railway.app/`: Captain source, data, concept portrait and transparent master all return HTTP 200.
+14. Hard-refreshed production, opened «Новые зомби», confirmed the «ЗОНБДЕ-КАПИТАН» card and 1024×1536 concept portrait load correctly.
+15. Started a production Hater Raid as the Captain; confirmed HP 451, runtime rendering, raid HUD and stage progression. Browser console showed no Captain-related errors, failed requests or 404s.
+
+
+## 2026-08-30 — Production recheck: Zombie Medic and Main Hater
+
+1. Rechecked the two supplied references against the generated production assets.
+2. Confirmed Zombie Medic assets at `assets/allies/zombie_medic.png` and `assets/allies/zombie_medic_runtime.png`; both production requests return HTTP 200.
+3. Confirmed Zombie Medic is intentionally not a selectable hostile: he spawns inside the shelter as Stas’s support ally.
+4. Production probe confirmed the medic sprite decoded at 1024 px, remained inside shelter bounds, and healed Stas from 50 HP to 62 HP with a 6.5 s cooldown.
+5. Confirmed Main Hater assets at `assets/zombies/new-batch-01/main_hater.png` and `assets/zombies/new-batch-01/main_hater_runtime.png`; both production requests return HTTP 200.
+6. Confirmed Main Hater appears under «Новые зомби», with a loaded 1024×1536 concept portrait, and successfully starts Hater Raid with 389 HP.
+7. Confirmed Main Hater remains the featured hostile in the final standard wave and applies his nearby-zombie rage aura.
+8. Final production console check found no errors, failed requests, 404s, TypeErrors or ReferenceErrors.
+
+
+## 2026-08-31 — Zombie Medic production visibility hotfix
+
+1. Reproduced the report against production and confirmed the medic entity and 1024 px runtime cutout loaded, but the ally followed Stas into the lower-right room and was frequently hidden by Stas and shelter occlusion.
+2. Fixed the medic at a dedicated shelter station at world coordinates `(552, 505)` so he no longer follows or overlaps Stas.
+3. Corrected the runtime scale to 72 world pixels, keeping the full 3:2 cutout inside the room instead of projecting the head above the roof line.
+4. Added a persistent white-and-red medical-cross marker above the roof mask so the ally is discoverable while the interior is occluded from outside.
+5. Increased healing range from 105 to 220 world units, preserving coverage across the full 272×200 shelter while the medic remains at his station.
+6. Browser-tested outside and inside views on the local production-like server; the roof marker and full interior character both render at readable scale.
+7. Re-ran the deterministic heal probe: Stas recovered from 50 HP to 62 HP and the 6.5 s cooldown triggered correctly.
+8. Checked browser console for errors, failed requests, 404s, TypeErrors and ReferenceErrors; none were found.
